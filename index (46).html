@@ -1,0 +1,2077 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rejestr wizyt</title>
+  <meta name="theme-color" content="#a0714a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Wizyty">
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem("rw_motyw") || "light"; }
+    catch (e) { document.documentElement.dataset.theme = "light"; }
+  </script>
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAACkElEQVR4nO3cwU0DMRBAUQdRXYqAGnKkAtoINBoKyAGIvbvSz3v3SNbMl08bn66X821AxMvRB4CVBE2KoEkRNCmCJkXQpAiaFEGTImhSBE2KoEkRNCmCJkXQpAiaFEGTImhSBE2KoEkRNCmCJkXQpAiaFEGTImhSBE2KoEkRNCmCJkXQpAiaFEGTImhSBE2KoEkRNCmCJkXQpAiaFEGTImhSBE2KoEkRNCmCJkXQpAiaFEGTImhSXo8+QM375/e/f/P18bbBSZ6TG3qhR2Ke+R33BL3IbJSiXkPQC6yKUdTzBD1pdYSiniNoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUk7Xy/l29CG24AWi3xVfPU3e0GL+m+KcckEXl7Sl2rxSQdeWs5fS3DJBl5ZyhMr8MkHDGIImRtCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJqUTNDFj9X3VJlfJugxOkvZW2luqaDHaC1nD7V55YIeo7ekrRTnlP2T7F62+DC+GNpekjc0z0vQpAiaFEGTImhSBE2KoEkRNCmCJkXQpAiaFEGTImhSBE2KoEkRNCmCJkXQpAiaFEGTImhSBE2KoEkRNCmCJkXQk1a/cuTVpDmCXmBVhGKeJ+hFZmMU8xqCXujRKMW8jtdHSXFDkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgiZF0KQImpQfKZVDz+6gEPEAAAAASUVORK5CYII=">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23a0714a'/%3E%3Cpath d='M16 8v16M8 16h16' stroke='%23fff8ec' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+:root {
+  --bg: #f4ede2;
+  --surface: #fffaf3;
+  --surface-2: #efe5d6;
+  --text: #3a2e24;
+  --muted: #8a7764;
+  --line: #e5d8c5;
+  --accent: #a0714a;
+  --accent-ink: #ffffff;
+  --accent-soft: #f0e0cc;
+  --danger: #a8483c;
+  --danger-soft: #f6e1db;
+  --ok: #5b7a46;
+  --ok-soft: #e5ecd9;
+  --warn: #a2681a;
+  --warn-soft: #f8e9cf;
+  --grey-soft: #ebe2d5;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(90,62,35,.06), 0 6px 20px rgba(90,62,35,.07);
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg: #1d1813;
+  --surface: #26201a;
+  --surface-2: #312920;
+  --text: #f2e9dd;
+  --muted: #b4a490;
+  --line: #3f352a;
+  --accent: #d6a676;
+  --accent-ink: #2a1c0f;
+  --accent-soft: #48372a;
+  --danger: #e98b7f;
+  --danger-soft: #45231e;
+  --ok: #a7c48d;
+  --ok-soft: #2c3522;
+  --warn: #e7b56a;
+  --warn-soft: #3e2f17;
+  --grey-soft: #342c24;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+[hidden] { display: none !important; }
+svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+a { color: var(--accent); }
+code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+.muted { color: var(--muted); }
+h1 { font-family: var(--serif); font-size: 30px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+h2 { font-size: 18px; margin: 0; }
+h3 { font-size: 14px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+
+/* ---------- Brand ---------- */
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-family: var(--serif); font-size: 18px; }
+.brand-mark {
+  width: 32px; height: 32px; border-radius: 9px; background: var(--accent); color: var(--accent-ink);
+  display: grid; place-items: center; font-size: 22px; font-weight: 700; line-height: 1;
+}
+.brand-lg .brand-mark { width: 44px; height: 44px; font-size: 30px; border-radius: 12px; }
+.brand-lg .brand-name { font-size: 22px; }
+
+/* ---------- Buttons & forms ---------- */
+.btn {
+  appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  font: inherit; font-weight: 550; padding: 9px 14px; border-radius: 10px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px;
+  text-decoration: none; white-space: nowrap;
+}
+.btn:hover { background: var(--surface-2); }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: var(--accent); filter: brightness(1.08); }
+.btn-danger { color: var(--danger); border-color: var(--danger-soft); background: var(--danger-soft); }
+.btn-ghost { background: transparent; border-color: transparent; }
+.btn-sm { min-height: 32px; padding: 5px 10px; font-size: 14px; }
+.btn-block { width: 100%; }
+.icon-btn { appearance: none; border: 0; background: transparent; color: var(--muted); font-size: 18px; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: grid; place-items: center; }
+.theme-toggle { border: 1px solid var(--line); background: var(--surface); color: var(--text); width: 40px; height: 40px; border-radius: 10px; }
+.theme-toggle .sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .moon { display: none; }
+.auth-card { position: relative; }
+.auth-card .theme-toggle { position: absolute; top: 16px; right: 16px; }
+.icon-btn:hover { background: var(--surface-2); color: var(--text); }
+.link { appearance: none; background: none; border: 0; color: var(--accent); font: inherit; cursor: pointer; padding: 4px 0; }
+
+.form { display: grid; gap: 14px; }
+.form label { display: grid; gap: 5px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.form input, .form select, .form textarea, .search {
+  font: inherit; font-size: 16px; color: var(--text); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; min-height: 44px;
+}
+.form textarea { min-height: 84px; resize: vertical; }
+.form input:focus, .form select:focus, .form textarea:focus, .search:focus {
+  outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent;
+}
+.form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form .check { display: flex; align-items: center; gap: 8px; color: var(--text); font-weight: 500; font-size: 15px; }
+.form .check input { width: 20px; height: 20px; min-height: 0; accent-color: var(--accent); }
+.msg { margin: 0; font-size: 14px; color: var(--danger); min-height: 1em; }
+.msg.ok { color: var(--ok); }
+
+/* ---------- Auth ---------- */
+.auth { background: radial-gradient(circle at 20% 10%, var(--accent-soft), transparent 55%), var(--bg); min-height: 100dvh; display: grid; place-items: center; padding: 20px; }
+.auth-card { width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; box-shadow: var(--shadow); }
+.auth-card > .muted { margin: 12px 0 20px; }
+.auth-links { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 14px; font-size: 14px; }
+
+/* ---------- Shell ---------- */
+.shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100dvh; }
+.sidebar {
+  position: sticky; top: 0; height: 100dvh; padding: 20px 14px; background: var(--surface);
+  border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 24px;
+}
+.sidebar .brand { padding: 0 8px; }
+.nav { display: grid; gap: 4px; }
+.nav a {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px;
+  color: var(--muted); text-decoration: none; font-weight: 550;
+}
+.nav a:hover { background: var(--surface-2); color: var(--text); }
+.nav a.active { background: var(--accent-soft); color: var(--accent); }
+.sidebar-foot { margin-top: auto; display: grid; gap: 8px; padding: 0 8px; }
+.user { font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.main { min-width: 0; padding: 28px 32px 100px; max-width: 1100px; width: 100%; }
+.demo-banner { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 14px; font-size: 14px; margin-bottom: 18px; }
+
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.page-head .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- Day nav ---------- */
+.daybar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.daybar .date-label { font-weight: 650; font-size: 17px; min-width: 0; flex: 1; }
+.daybar input[type=date] { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); min-height: 40px; }
+.daynav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.seg { display: inline-flex; background: var(--surface-2); border-radius: 10px; padding: 3px; gap: 2px; }
+.seg button { appearance: none; border: 0; background: transparent; font: inherit; font-size: 14px; font-weight: 550; color: var(--muted); padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+.seg button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
+.stat b { display: block; font-family: var(--serif); font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+
+/* ---------- Lists ---------- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.list { list-style: none; margin: 0; padding: 0; }
+.list > li + li { border-top: 1px solid var(--line); }
+.item {
+  display: grid; grid-template-columns: 70px 1fr auto; gap: 14px; align-items: center;
+  padding: 12px 16px; cursor: pointer; width: 100%; text-align: left; background: none; border: 0; font: inherit; color: inherit;
+}
+.item:hover { background: var(--surface-2); }
+.item .time { font-variant-numeric: tabular-nums; font-weight: 650; }
+.item .time small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+.item .who { min-width: 0; }
+.item .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item .who span { font-size: 13px; color: var(--muted); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item.patient { grid-template-columns: 40px 1fr auto; }
+.item.dated { grid-template-columns: 96px 1fr auto; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 650; font-size: 14px; }
+.group-head { padding: 10px 16px; background: var(--surface-2); font-size: 13px; font-weight: 650; color: var(--muted); }
+
+.badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.b-zaplanowana { background: var(--accent-soft); color: var(--accent); }
+.b-odbyta { background: var(--ok-soft); color: var(--ok); }
+.b-odwolana { background: var(--grey-soft); color: var(--muted); }
+.b-nieobecnosc { background: var(--danger-soft); color: var(--danger); }
+.b-nieoplacona { background: var(--warn-soft); color: var(--warn); }
+
+.empty { padding: 40px 20px; text-align: center; color: var(--muted); }
+.empty .btn { margin-top: 12px; }
+.loading { padding: 40px; text-align: center; color: var(--muted); }
+
+.toolbar { display: flex; gap: 10px; margin-bottom: 14px; }
+.search { max-width: 420px; }
+
+/* ---------- Patient detail ---------- */
+.back { display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+.detail { display: grid; grid-template-columns: 320px 1fr; gap: 18px; align-items: start; }
+.info { padding: 18px; display: grid; gap: 12px; }
+.info dl { margin: 0; display: grid; gap: 10px; }
+.info dt { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+.info dd { margin: 2px 0 0; word-break: break-word; white-space: pre-wrap; }
+.visit-notes { font-size: 14px; color: var(--muted); margin-top: 4px; white-space: pre-wrap; }
+
+/* ---------- Report ---------- */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--surface-2); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+
+/* ---------- Fizjoterapeuci / płatnik ---------- */
+.item[style*="--fz"] { box-shadow: inset 4px 0 0 var(--fz); }
+.item .who .fz, .fz { display: inline-flex; vertical-align: middle; align-items: center; gap: 5px; }
+.fz i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+.b-ubezp { background: #e3ebf3; color: #3d5f80; }
+:root[data-theme="dark"] .b-ubezp { background: #22303d; color: #9cc0e2; }
+.meta { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.item.plain { grid-template-columns: 1fr auto; }
+.select-sm { font: inherit; font-size: 14px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); min-height: 40px; max-width: 100%; }
+.daybar input[type=month] { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); min-height: 40px; }
+
+/* ---------- Ustawienia ---------- */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 18px; overflow-x: auto; scrollbar-width: none; }
+.tabs a { padding: 10px 14px; text-decoration: none; color: var(--muted); font-weight: 550; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.tabs a.on { color: var(--accent); border-bottom-color: var(--accent); }
+.swatches { border: 0; padding: 0; margin: 0; display: flex; gap: 10px; flex-wrap: wrap; }
+.swatches legend { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; padding: 0; }
+.swatches label { display: block; cursor: pointer; }
+.swatches input { position: absolute; opacity: 0; pointer-events: none; }
+.swatches span { display: block; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--line); }
+.swatches input:checked + span { box-shadow: 0 0 0 2px var(--text); }
+.swatches input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- Formularz wizyty ---------- */
+.field { display: grid; gap: 5px; }
+.field-label { font-size: 13px; font-weight: 600; color: var(--muted); }
+.hint-link { font-weight: 500; font-size: 12px; }
+.seg-full { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+.seg-full label { position: relative; display: block; cursor: pointer; color: var(--text); font-size: 15px; }
+.seg-full input { position: absolute; opacity: 0; pointer-events: none; }
+.seg-full span { display: block; text-align: center; padding: 9px 12px; border-radius: 8px; font-weight: 550; color: var(--muted); }
+.seg-full input:checked + span { background: var(--surface); color: var(--accent); box-shadow: var(--shadow); }
+.seg-full input:focus-visible + span { outline: 2px solid var(--accent); }
+
+.combo { position: relative; }
+.combo-selected { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); }
+.combo-selected .who { min-width: 0; }
+.combo-selected .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.combo-selected .who span { font-size: 13px; color: var(--muted); }
+.combo-search { position: relative; }
+.combo-row { display: flex; gap: 8px; }
+.combo-row input { flex: 1; min-width: 0; }
+.combo-row .btn { min-height: 44px; }
+.payer-note { font-weight: 500; color: var(--ok); }
+.combo-list {
+  list-style: none; margin: 6px 0 0; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface);
+  box-shadow: var(--shadow); max-height: 300px; overflow-y: auto;
+}
+.combo-list li { display: grid; grid-template-columns: 36px 1fr; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+.combo-list li .avatar { width: 36px; height: 36px; font-size: 13px; }
+.combo-list li .who b { display: block; font-size: 15px; }
+.combo-list li .who span { font-size: 13px; color: var(--muted); }
+.combo-list li.hi, .combo-list li:hover { background: var(--surface-2); }
+.combo-list li.none { display: block; color: var(--muted); cursor: default; font-size: 14px; }
+.combo-list li.none:hover { background: none; }
+.combo-list li.add { display: flex; gap: 10px; color: var(--accent); font-weight: 600; border-top: 1px solid var(--line); border-radius: 0 0 8px 8px; margin-top: 2px; }
+.combo-list li.add span { width: 36px; text-align: center; font-size: 20px; line-height: 1; }
+.newpat { border: 1px dashed var(--accent); border-radius: 12px; padding: 14px; display: grid; gap: 12px; background: var(--accent-soft); }
+.newpat-head { display: flex; justify-content: space-between; align-items: center; }
+.newpat .btn { justify-self: start; }
+.dup-alert { background: var(--warn-soft); color: var(--text); border: 1px solid var(--warn); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; font-size: 14px; }
+.dup-alert > b { color: var(--warn); }
+.dup-alert ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.dup-alert li { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dup-alert .btn-ghost { justify-self: start; padding-left: 0; color: var(--muted); text-decoration: underline; }
+
+
+/* ---------- Raport: filtr rodzajów, wynagrodzenia ---------- */
+.multi { position: relative; }
+.multi > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; max-width: 280px; }
+.multi > summary::-webkit-details-marker { display: none; }
+.multi > summary span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.multi > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: rotate(45deg) translateY(-2px); margin-left: auto; flex: none; }
+.multi.on > summary { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.multi-panel {
+  position: absolute; z-index: 40; top: calc(100% + 6px); left: 0; width: 340px; max-width: calc(100vw - 32px);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(58,40,24,.16);
+  padding: 10px; display: grid; gap: 8px;
+}
+.multi-search { font: inherit; font-size: 15px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); width: 100%; }
+.multi-actions { display: flex; justify-content: space-between; font-size: 14px; }
+.multi-list { max-height: 320px; overflow-y: auto; display: grid; gap: 6px; }
+.multi-group { display: grid; gap: 1px; }
+.multi-group-head { appearance: none; background: none; border: 0; text-align: left; font: inherit; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 6px 6px 4px; cursor: pointer; }
+.multi-group-head:hover { color: var(--accent); }
+.multi-list label { display: flex; gap: 10px; align-items: flex-start; padding: 6px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.multi-list label:hover { background: var(--surface-2); }
+.multi-list input { width: 17px; height: 17px; margin: 1px 0 0; accent-color: var(--accent); flex: none; }
+.multi-list small { color: var(--muted); }
+
+table.report tbody tr { cursor: pointer; }
+table.report tbody tr:hover td { background: var(--surface-2); }
+tr.row-muted td { color: var(--muted); }
+table.report td.wrap { white-space: normal; min-width: 140px; max-width: 240px; }
+table.report th.pay-col { white-space: normal; min-width: 110px; }
+.unpaid { color: var(--warn); font-weight: 600; }
+table.report tfoot td { font-weight: 600; background: var(--surface-2); border-bottom: 0; border-top: 2px solid var(--line); }
+th.pay-col, td.pay-col { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+.pay-btn { appearance: none; font: inherit; color: var(--text); background: transparent; border: 1px dashed transparent; border-radius: 6px; padding: 3px 7px; cursor: text; font-variant-numeric: tabular-nums; }
+.pay-btn:hover, .pay-btn:focus-visible { border-color: var(--accent); background: var(--surface); outline: none; }
+.pay-btn.calc { color: var(--muted); }
+.pay-input { width: 110px; font: inherit; font-size: 14px; text-align: right; padding: 4px 8px; border: 1.5px solid var(--accent); border-radius: 6px; background: var(--surface); color: var(--text); }
+.stat-accent { border-color: var(--accent); background: var(--accent-soft); }
+
+/* ---------- Stawki w cenniku ---------- */
+.rates { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px 14px; margin: 0; display: grid; gap: 10px; }
+.rates legend { font-size: 13px; font-weight: 700; color: var(--text); padding: 0 6px; }
+.rates-hint { margin: 0; font-size: 13px; }
+.rates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+.rates-grid label .fz { color: var(--text); font-weight: 600; }
+
+/* ---------- FAB ---------- */
+.fab {
+  position: fixed; right: 24px; bottom: 24px; width: 56px; height: 56px; border-radius: 16px; border: 0;
+  background: var(--accent); color: var(--accent-ink); box-shadow: 0 8px 22px rgba(160,113,74,.35);
+  display: grid; place-items: center; cursor: pointer; z-index: 20;
+}
+.fab svg { width: 26px; height: 26px; stroke-width: 2.2; }
+
+/* ---------- Modal ---------- */
+.modal {
+  border: 0; padding: 0; border-radius: 18px; width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 40px); background: var(--surface); color: var(--text); box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+.modal::backdrop { background: rgba(58,40,24,.4); backdrop-filter: blur(2px); }
+.modal > form { display: flex; flex-direction: column; max-height: calc(100dvh - 40px); gap: 0; }
+.modal-head h2 { font-family: var(--serif); font-size: 21px; font-weight: 600; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.modal-body { padding: 18px 20px; overflow-y: auto; display: grid; gap: 14px; }
+.modal-foot { padding: 14px 20px; border-top: 1px solid var(--line); display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.modal-foot .spacer { flex: 1; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); opacity: 0;
+  background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px;
+  transition: .2s; pointer-events: none; z-index: 100; max-width: calc(100vw - 32px);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* =====================================================================
+   TELEFON
+   ===================================================================== */
+@media (max-width: 820px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar {
+    position: fixed; top: auto; bottom: 0; left: 0; right: 0; height: auto; z-index: 30;
+    flex-direction: row; padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); gap: 0;
+    border-right: 0; border-top: 1px solid var(--line);
+  }
+  .sidebar .brand, .sidebar-foot { display: none; }
+  .nav { grid-auto-flow: column; grid-auto-columns: 1fr; width: 100%; gap: 0; }
+  .nav a { flex-direction: column; gap: 2px; font-size: 11px; padding: 6px 4px; justify-content: center; }
+  .nav a svg { width: 22px; height: 22px; }
+  .nav a.active { background: transparent; }
+
+  .main { padding: calc(14px + env(safe-area-inset-top)) 16px calc(150px + env(safe-area-inset-bottom)); }
+  h1 { font-size: 25px; }
+  .page-head .actions .hide-sm { display: none; }
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .stat b { font-size: 19px; }
+  .item { grid-template-columns: 58px 1fr; padding: 12px 14px; gap: 10px; }
+  .item > .badge, .item > .meta { grid-column: 2; justify-self: start; justify-content: flex-start; }
+  .item.plain { grid-template-columns: 1fr auto; }
+  .item.plain > .meta { grid-column: auto; }
+  .seg-full { grid-template-columns: 1fr 1fr; }
+  .daybar .select-sm { width: 100%; }
+  .multi { width: 100%; }
+  .multi > summary { max-width: none; }
+  .multi-panel { width: 100%; }
+  .rates-grid { grid-template-columns: 1fr; }
+
+  /* raport jako karty */
+  #rep-table .table-wrap { overflow: visible; }
+  table.report thead { display: none; }
+  table.report, table.report tbody, table.report tfoot { display: block; }
+  table.report tr { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "pat pay" "date amount" "type status" "payer fz"; gap: 2px 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  table.report td { border: 0; padding: 0; white-space: normal; background: none !important; }
+  table.report td.wrap { min-width: 0; max-width: none; }
+  table.report .c-pat { grid-area: pat; font-weight: 600; }
+  table.report .c-date { grid-area: date; font-size: 13px; }
+  table.report .c-type { grid-area: type; font-size: 13px; }
+  table.report .c-payer { grid-area: payer; font-size: 13px; color: var(--muted); }
+  table.report .c-fz { grid-area: fz; font-size: 13px; color: var(--muted); text-align: right; }
+  table.report .c-status { grid-area: status; text-align: right; }
+  table.report .c-amount { grid-area: amount; font-size: 13px; color: var(--muted); }
+  table.report .pay-col { grid-area: pay; text-align: right; }
+  table.report .pay-btn { font-weight: 700; font-size: 16px; background: var(--accent-soft); }
+  table.report tfoot tr { grid-template-areas: "label pay" "label amount"; background: var(--surface-2); border-bottom: 0; }
+  table.report tfoot td { border-top: 0; }
+  table.report .c-sumlabel { grid-area: label; }
+  table.report tfoot .pay-col b { font-size: 17px; }
+  .item.patient { grid-template-columns: 40px 1fr; }
+  .item.dated { grid-template-columns: 92px 1fr; }
+  .detail { grid-template-columns: 1fr; }
+  .search { max-width: none; }
+  .fab { right: 16px; bottom: calc(76px + env(safe-area-inset-bottom)); }
+  .toast { bottom: calc(150px + env(safe-area-inset-bottom)); }
+
+  .modal { width: 100vw; max-width: 100vw; max-height: 94dvh; margin: auto 0 0; border-radius: 18px 18px 0 0; }
+  .modal > form { max-height: 94dvh; }
+  .modal-foot { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .modal-foot .btn { flex: 1; }
+  .modal-foot .spacer { display: none; }
+  .form .row { grid-template-columns: 1fr; }
+  .mobile-only-user { display: block; }
+}
+@media (min-width: 821px) { .mobile-only { display: none !important; } }
+
+@media print {
+  .sidebar, .fab, .demo-banner, .page-head .actions, .daybar, .toolbar { display: none !important; }
+  .shell { display: block; }
+  .main { padding: 0; }
+}
+  </style>
+</head>
+<body>
+  <!-- EKRAN LOGOWANIA -->
+  <section id="auth" class="auth" hidden>
+    <div class="auth-card">
+      <button type="button" class="icon-btn theme-toggle" data-theme-toggle></button>
+      <div class="brand brand-lg">
+        <span class="brand-mark" aria-hidden="true">+</span>
+        <span class="brand-name" data-nazwa>Rejestr wizyt</span>
+      </div>
+      <p class="muted">Zaloguj się, aby zobaczyć swój rejestr.</p>
+      <form id="auth-form" class="form">
+        <label>E-mail<input type="email" name="email" autocomplete="email" required></label>
+        <label>Hasło<input type="password" name="password" autocomplete="current-password" minlength="8" required></label>
+        <p id="auth-msg" class="msg" role="alert"></p>
+        <button class="btn btn-primary btn-block" type="submit" id="auth-submit">Zaloguj</button>
+      </form>
+      <div class="auth-links">
+        <button class="link" id="auth-toggle" type="button">Nie masz konta? Załóż je</button>
+        <button class="link" id="auth-reset" type="button">Nie pamiętam hasła</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- APLIKACJA -->
+  <div id="app" class="shell" hidden>
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">+</span>
+        <span class="brand-name" data-nazwa>Rejestr wizyt</span>
+      </div>
+      <nav class="nav" aria-label="Główna nawigacja">
+        <a href="#/wizyty" data-nav="wizyty"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/></svg><span>Wizyty</span></a>
+        <a href="#/pacjenci" data-nav="pacjenci"><svg viewBox="0 0 24 24"><path d="M16 19v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1M9.5 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM21 19v-1a4 4 0 0 0-3-3.9M15 3.1a3.5 3.5 0 0 1 0 6.8"/></svg><span>Pacjenci</span></a>
+        <a href="#/raport" data-nav="raport"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Raport</span></a>
+        <a href="#/ustawienia" data-nav="ustawienia"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg><span>Ustawienia</span></a>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="user" id="user-email"></div>
+        <button class="btn btn-ghost btn-sm" id="logout">Wyloguj</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="demo-banner" class="demo-banner" hidden>
+        Tryb demo — dane zapisują się tylko w tej przeglądarce. Uzupełnij <code>config.js</code>, aby połączyć z Supabase.
+      </div>
+      <div id="view"></div>
+    </main>
+
+    <button class="fab" id="fab" aria-label="Nowa wizyta">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </div>
+
+  <!-- MODAL -->
+  <dialog id="modal" class="modal">
+    <form method="dialog" id="modal-form" class="form">
+      <header class="modal-head">
+        <h2 id="modal-title"></h2>
+        <button class="icon-btn" value="cancel" formnovalidate aria-label="Zamknij">✕</button>
+      </header>
+      <div id="modal-body" class="modal-body"></div>
+      <footer class="modal-foot" id="modal-foot"></footer>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+// =====================================================================
+//  KONFIGURACJA — wklej dane ze swojego projektu Supabase
+//  Supabase → Project Settings → API (lub "Connect")
+//
+//  Klucz "anon" / "publishable" może być publiczny — dane chroni RLS.
+//  NIGDY nie wklejaj tu klucza "service_role" / "secret".
+//
+//  Dopóki pola są puste, aplikacja działa w TRYBIE DEMO
+//  (dane zapisywane tylko lokalnie w przeglądarce).
+// =====================================================================
+window.APP_CONFIG = {
+  SUPABASE_URL: "https://ickoslatalljjdnjfhjj.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_nQ3Inbpu0qNjtasEm3UK5Q_f3xI57aR",
+  NAZWA_GABINETU: "Handson",
+};
+  </script>
+  <script type="module">
+// =====================================================================
+//  Rejestr wizyt — logika aplikacji
+// =====================================================================
+const cfg = window.APP_CONFIG || {};
+const DEMO = !cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY;
+const SUPABASE_CDN = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+
+const STATUSY = {
+  zaplanowana: "Zaplanowana",
+  odbyta: "Odbyta",
+  odwolana: "Odwołana",
+  nieobecnosc: "Nieobecność",
+};
+const KOLORY = ["#a0714a", "#5b7a46", "#4f7396", "#a8483c", "#8a6aa3", "#c28a2c", "#3f8a83", "#7a6a5a"];
+
+// ---------------------------------------------------------------------
+//  Pomocnicze
+// ---------------------------------------------------------------------
+const esc = (v) =>
+  String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = (s) => String(s ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l").trim();
+
+const pad = (n) => String(n).padStart(2, "0");
+const startOfDay = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const startOfWeek = (d) => { const x = startOfDay(d); const wd = (x.getDay() + 6) % 7; return addDays(x, -wd); };
+const sameDay = (a, b) => startOfDay(a).getTime() === startOfDay(b).getTime();
+const toDateInput = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const toLocalInput = (d) => `${toDateInput(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const fromDateInput = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+const fmt = {
+  time: (d) => new Date(d).toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit" }),
+  day: (d) => new Date(d).toLocaleDateString("pl-PL", { weekday: "long", day: "numeric", month: "long" }),
+  date: (d) => new Date(d).toLocaleDateString("pl-PL", { day: "2-digit", month: "2-digit", year: "numeric" }),
+  dateTime: (d) => new Date(d).toLocaleString("pl-PL", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+  money: (n) => new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN" }).format(Number(n) || 0),
+};
+
+const fullName = (p) => (p ? `${p.nazwisko} ${p.imie}` : "— pacjent usunięty —");
+const personName = (p) => (p ? `${p.imie} ${p.nazwisko}` : "");
+const initials = (p) => ((p?.imie?.[0] || "") + (p?.nazwisko?.[0] || "")).toUpperCase();
+
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove("show"), 2800);
+}
+
+class SilentError extends Error {}
+
+function polishError(err) {
+  const m = err?.message || String(err);
+  const map = {
+    "Invalid login credentials": "Nieprawidłowy e-mail lub hasło.",
+    "Email not confirmed": "Potwierdź adres e-mail (sprawdź skrzynkę).",
+    "User already registered": "Konto z tym adresem już istnieje.",
+    "Signups not allowed for this instance": "Rejestracja nowych kont jest wyłączona.",
+    "Failed to fetch": "Brak połączenia z serwerem.",
+    "pacjenci_pesel_uniq": "Pacjent z tym numerem PESEL już jest w bazie.",
+  };
+  for (const k in map) if (m.includes(k)) return map[k];
+  if (m.includes("pesel")) return "PESEL musi mieć 11 cyfr.";
+  return m;
+}
+
+// PESEL → data urodzenia
+function peselToDate(pesel) {
+  if (!/^\d{11}$/.test(pesel)) return null;
+  let y = +pesel.slice(0, 2), m = +pesel.slice(2, 4);
+  const d = +pesel.slice(4, 6);
+  let c = 1900;
+  if (m > 80) { c = 1800; m -= 80; } else if (m > 60) { c = 2200; m -= 60; }
+  else if (m > 40) { c = 2100; m -= 40; } else if (m > 20) { c = 2000; m -= 20; }
+  const date = new Date(c + y, m - 1, d);
+  return date.getMonth() === m - 1 ? toDateInput(date) : null;
+}
+
+// Szukanie pacjentów po imieniu, nazwisku, PESEL, telefonie
+function matchPatients(patients, query) {
+  const q = norm(query);
+  if (!q) return patients;
+  const words = q.split(/\s+/);
+  const digits = q.replace(/\s/g, "");
+  return patients.filter((p) => {
+    const hay = norm(`${p.imie} ${p.nazwisko} ${p.email || ""}`);
+    if (/^\d+$/.test(digits) && ((p.pesel || "").includes(digits) || (p.telefon || "").replace(/\D/g, "").includes(digits))) return true;
+    return words.every((w) => hay.includes(w));
+  });
+}
+
+// Wykrywanie duplikatów pacjenta
+function findDuplicates(patients, { imie, nazwisko, pesel }, excludeId) {
+  const others = patients.filter((p) => p.id !== excludeId);
+  const byPesel = pesel ? others.filter((p) => p.pesel === pesel) : [];
+  const byName = others.filter((p) => !byPesel.includes(p) && norm(p.imie) === norm(imie) && norm(p.nazwisko) === norm(nazwisko));
+  return { byPesel, byName, any: byPesel.length + byName.length > 0 };
+}
+
+// =====================================================================
+//  WARSTWA DANYCH — Supabase lub tryb demo (localStorage)
+// =====================================================================
+const DICTS = {
+  rodzaje: { table: "rodzaje_wizyt", order: "nazwa" },
+  fizjo: { table: "fizjoterapeuci", order: "nazwisko" },
+  ubezp: { table: "ubezpieczyciele", order: "nazwa" },
+  stawki: { table: "stawki_fizjo", order: "created_at" },
+};
+
+const api = DEMO ? createDemoApi() : await createSupabaseApi();
+
+async function createSupabaseApi() {
+  const { createClient } = await import(SUPABASE_CDN);
+  const sb = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+  });
+  const ok = ({ data, error }) => { if (error) throw error; return data; };
+  const VISIT_SELECT = "*, pacjent:pacjenci(id, imie, nazwisko, telefon, pesel)";
+  const clean = (row) => { const { user_id, created_at, updated_at, pacjent, ...r } = row; return r; };
+  const upsert = async (table, row) => {
+    const { id, ...r } = clean(row);
+    return id
+      ? ok(await sb.from(table).update(r).eq("id", id).select().single())
+      : ok(await sb.from(table).insert(r).select().single());
+  };
+
+  return {
+    async getUser() { const { data } = await sb.auth.getSession(); return data.session?.user || null; },
+    onAuth(cb) { sb.auth.onAuthStateChange((event, session) => cb(event, session?.user || null)); },
+    async signIn(email, password) { ok(await sb.auth.signInWithPassword({ email, password })); },
+    async signUp(email, password) {
+      const data = ok(await sb.auth.signUp({ email, password, options: { emailRedirectTo: location.origin + location.pathname } }));
+      return !!data.session;
+    },
+    async resetPassword(email) { ok(await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname })); },
+    async updatePassword(password) { ok(await sb.auth.updateUser({ password })); },
+    async signOut() { await sb.auth.signOut(); },
+
+    async listPatients() { return ok(await sb.from("pacjenci").select("*").order("nazwisko").order("imie")); },
+    async getPatient(id) { return ok(await sb.from("pacjenci").select("*").eq("id", id).maybeSingle()); },
+    savePatient: (p) => upsert("pacjenci", p),
+    async deletePatient(id) { ok(await sb.from("pacjenci").delete().eq("id", id)); },
+
+    async listVisits(from, to) {
+      return ok(await sb.from("wizyty").select(VISIT_SELECT)
+        .gte("data_wizyty", from.toISOString()).lt("data_wizyty", to.toISOString()).order("data_wizyty"));
+    },
+    async listPatientVisits(pid) {
+      return ok(await sb.from("wizyty").select(VISIT_SELECT).eq("pacjent_id", pid).order("data_wizyty", { ascending: false }));
+    },
+    saveVisit: (v) => upsert("wizyty", v),
+    async deleteVisit(id) { ok(await sb.from("wizyty").delete().eq("id", id)); },
+
+    async listDict(key) { const d = DICTS[key]; return ok(await sb.from(d.table).select("*").order(d.order)); },
+    saveDict: (key, row) => upsert(DICTS[key].table, row),
+    async deleteDict(key, id) { ok(await sb.from(DICTS[key].table).delete().eq("id", id)); },
+    async saveRates(rodzaj_id, rates) {
+      ok(await sb.from("stawki_fizjo").delete().eq("rodzaj_id", rodzaj_id));
+      if (rates.length) ok(await sb.from("stawki_fizjo").insert(rates.map((r) => ({ rodzaj_id, ...r }))));
+    },
+  };
+}
+
+function createDemoApi() {
+  const K = { p: "rw5_pacjenci", v: "rw5_wizyty", rodzaje: "rw5_rodzaje", fizjo: "rw5_fizjo", ubezp: "rw5_ubezp", stawki: "rw5_stawki" };
+  const load = (k) => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
+  const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+  const uid = () => crypto.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const now = () => new Date().toISOString();
+  const user = { email: "demo@lokalnie" };
+
+  if (!localStorage.getItem(K.p)) seed();
+
+  function seed() {
+    const R = [
+      ["Konsultacja fizjoterapeutyczna", 45, 200], ["Terapia manualna", 60, 220], ["Masaż leczniczy", 30, 120],
+      ["Kinezyterapia", 45, 150], ["Fala uderzeniowa", 15, 100],
+    ].map(([nazwa, czas_trwania, cena]) => ({ id: uid(), nazwa, czas_trwania, cena, kod: null, ubezpieczyciel_id: null, aktywny: true }));
+    const F = [
+      ["Anna", "Zielińska", KOLORY[0]], ["Tomasz", "Lis", KOLORY[1]], ["Ewa", "Mazur", KOLORY[2]],
+    ].map(([imie, nazwisko, kolor]) => ({ id: uid(), imie, nazwisko, kolor, telefon: "", email: "", aktywny: true }));
+    const U = ["PZU Zdrowie", "LUX MED", "Medicover", "Allianz"]
+      .map((nazwa) => ({ id: uid(), nazwa, nip: "", telefon: "", email: "", uwagi: "", aktywny: true }));
+    // cenniki ubezpieczycieli: [indeks zakładu, nazwa, kod, czas, cena]
+    const RU = [
+      [0, "Konsultacja fizjoterapeutyczna", "PZU-FZ01", 30, 90], [0, "Zabieg fizjoterapeutyczny – terapia indywidualna", "PZU-FZ02", 30, 70],
+      [1, "Fizjoterapia – terapia indywidualna", "LM-1405", 45, 110], [1, "Masaż leczniczy częściowy", "LM-1410", 20, 60],
+      [2, "Wizyta fizjoterapeutyczna", "MC-FIZ", 40, 100], [2, "Terapia manualna kręgosłupa", "MC-TMK", 30, 95],
+      [3, "Rehabilitacja ruchowa", null, 30, 85],
+    ].map(([ui, nazwa, kod, czas_trwania, cena]) => ({ id: uid(), nazwa, kod, czas_trwania, cena, ubezpieczyciel_id: U[ui].id, aktywny: true }));
+    R.push(...RU);
+    R.forEach((r) => (r.wynagrodzenie = r.cena != null ? Math.round(r.cena * 0.5) : null));
+    // indywidualne stawki: Tomasz Lis dostaje więcej za terapię manualną, Ewa Mazur za falę uderzeniową
+    const S = [
+      { id: uid(), rodzaj_id: R[1].id, fizjoterapeuta_id: F[1].id, kwota: 130, created_at: now() },
+      { id: uid(), rodzaj_id: R[4].id, fizjoterapeuta_id: F[2].id, kwota: 60, created_at: now() },
+    ];
+    const rate = (r, f) => S.find((s) => s.rodzaj_id === r.id && s.fizjoterapeuta_id === f.id)?.kwota ?? r.wynagrodzenie;
+    const P = [
+      ["Anna", "Kowalska", "85031512345", "600 100 200"],
+      ["Jan", "Nowak", "72110354321", "601 222 333"],
+      ["Maria", "Wiśniewska", "90062011223", "602 444 555"],
+      ["Piotr", "Wójcik", "01250367890", "603 666 777"],
+      ["Katarzyna", "Kamińska", "78091998765", "604 888 999"],
+    ].map(([imie, nazwisko, pesel, telefon]) => ({
+      id: uid(), imie, nazwisko, pesel, telefon, email: "", adres: "", notatki: "",
+      data_urodzenia: peselToDate(pesel), created_at: now(), platnik: "prywatny", ubezpieczyciel_id: null, nr_polisy: null,
+    }));
+    Object.assign(P[1], { platnik: "ubezpieczenie", ubezpieczyciel_id: U[0].id, nr_polisy: "PZU-55120" });
+    Object.assign(P[3], { platnik: "ubezpieczenie", ubezpieczyciel_id: U[1].id, nr_polisy: "LM-88213" });
+    const t = startOfDay(new Date());
+    const at = (dd, h, m) => { const d = addDays(t, dd); d.setHours(h, m); return d.toISOString(); };
+    const V = [
+      [0, 0, 8, 30, 1, 0, "odbyta", true, null],
+      [1, 0, 9, 30, 0, 1, "odbyta", false, 0],
+      [2, 0, 11, 0, 2, 0, "zaplanowana", false, null],
+      [3, 0, 13, 0, 3, 2, "zaplanowana", false, 1],
+      [4, 1, 10, 0, 0, 1, "zaplanowana", false, null],
+      [0, 2, 9, 0, 1, 0, "zaplanowana", false, null],
+      [2, -7, 12, 0, 4, 2, "odbyta", true, 2],
+      [1, -3, 16, 0, 1, 1, "nieobecnosc", false, null],
+    ].map(([pi, dd, h, m, ri, fi, status, oplacona, ui]) => {
+      const r = ui == null ? R[ri] : R.find((x) => x.ubezpieczyciel_id === U[ui].id);
+      return {
+      id: uid(), pacjent_id: P[pi].id, data_wizyty: at(dd, h, m),
+      rodzaj_id: r.id, rodzaj: r.nazwa, czas_trwania: r.czas_trwania,
+      kwota: status === "nieobecnosc" ? null : r.cena, fizjoterapeuta_id: F[fi].id,
+      wynagrodzenie: status === "nieobecnosc" ? null : rate(r, F[fi]),
+      platnik: ui == null ? "prywatny" : "ubezpieczenie", ubezpieczyciel_id: ui == null ? null : U[ui].id,
+      nr_autoryzacji: ui == null ? null : "AUT/" + (1000 + pi), status, oplacona, opis: "", zalecenia: "", created_at: now(),
+    }; });
+    save(K.p, P); save(K.v, V); save(K.rodzaje, R); save(K.fizjo, F); save(K.ubezp, U); save(K.stawki, S);
+  }
+
+  const withPatient = (v, P) => ({ ...v, pacjent: P.find((p) => p.id === v.pacjent_id) || null });
+  const byDate = (a, b) => a.data_wizyty.localeCompare(b.data_wizyty);
+  const upsert = (key, row) => {
+    const { pacjent, ...r } = row;
+    const all = load(key);
+    if (r.id) { const i = all.findIndex((x) => x.id === r.id); all[i] = { ...all[i], ...r }; save(key, all); return all[i]; }
+    const n = { ...r, id: uid(), created_at: now() }; all.push(n); save(key, all); return n;
+  };
+
+  return {
+    async getUser() { return user; },
+    onAuth() {},
+    async signIn() {}, async signUp() { return true; }, async resetPassword() {}, async updatePassword() {},
+    async signOut() {
+      if (confirm("Tryb demo: wyczyścić dane przykładowe i zacząć od nowa?")) {
+        Object.values(K).forEach((k) => localStorage.removeItem(k)); location.reload();
+      }
+    },
+    async listPatients() {
+      return load(K.p).sort((a, b) => (a.nazwisko + " " + a.imie).localeCompare(b.nazwisko + " " + b.imie, "pl"));
+    },
+    async getPatient(id) { return load(K.p).find((p) => p.id === id) || null; },
+    async savePatient(p) {
+      if (p.pesel && load(K.p).some((x) => x.pesel === p.pesel && x.id !== p.id)) throw new Error("pacjenci_pesel_uniq");
+      return upsert(K.p, p);
+    },
+    async deletePatient(id) {
+      save(K.p, load(K.p).filter((p) => p.id !== id));
+      save(K.v, load(K.v).filter((v) => v.pacjent_id !== id));
+    },
+    async listVisits(from, to) {
+      const P = load(K.p);
+      return load(K.v).filter((v) => { const d = new Date(v.data_wizyty); return d >= from && d < to; })
+        .sort(byDate).map((v) => withPatient(v, P));
+    },
+    async listPatientVisits(pid) {
+      const P = load(K.p);
+      return load(K.v).filter((v) => v.pacjent_id === pid).sort(byDate).reverse().map((v) => withPatient(v, P));
+    },
+    saveVisit: async (v) => upsert(K.v, v),
+    async deleteVisit(id) { save(K.v, load(K.v).filter((v) => v.id !== id)); },
+
+    async listDict(key) {
+      const o = DICTS[key].order;
+      return load(K[key]).sort((a, b) => String(a[o]).localeCompare(String(b[o]), "pl"));
+    },
+    saveDict: async (key, row) => upsert(K[key], row),
+    async saveRates(rodzaj_id, rates) {
+      save(K.stawki, [...load(K.stawki).filter((s) => s.rodzaj_id !== rodzaj_id),
+        ...rates.map((r) => ({ id: uid(), rodzaj_id, ...r, created_at: now() }))]);
+    },
+    async deleteDict(key, id) {
+      save(K[key], load(K[key]).filter((x) => x.id !== id));
+      if (key === "ubezp") {
+        const gone = load(K.rodzaje).filter((r) => r.ubezpieczyciel_id === id).map((r) => r.id);
+        save(K.rodzaje, load(K.rodzaje).filter((r) => r.ubezpieczyciel_id !== id));
+        save(K.v, load(K.v).map((v) => (gone.includes(v.rodzaj_id) ? { ...v, rodzaj_id: null } : v)));
+        save(K.stawki, load(K.stawki).filter((s) => !gone.includes(s.rodzaj_id)));
+      }
+      if (key === "rodzaje") save(K.stawki, load(K.stawki).filter((s) => s.rodzaj_id !== id));
+      if (key === "fizjo") save(K.stawki, load(K.stawki).filter((s) => s.fizjoterapeuta_id !== id));
+      if (key === "stawki") return;
+      const col = { rodzaje: "rodzaj_id", fizjo: "fizjoterapeuta_id", ubezp: "ubezpieczyciel_id" }[key];
+      if (!col) return;
+      save(K.v, load(K.v).map((v) => (v[col] === id ? { ...v, [col]: null } : v)));
+    },
+  };
+}
+
+// =====================================================================
+//  STAN, SŁOWNIKI, ROUTER
+// =====================================================================
+const state = {
+  user: null,
+  day: startOfDay(new Date()),
+  mode: "dzien", // dzien | tydzien | nadchodzace
+  fizjo: "",     // filtr fizjoterapeuty ("" = wszyscy)
+  search: "",
+  month: toDateInput(new Date()).slice(0, 7),
+  reportFizjo: "",
+  reportTypes: [], // wybrane pozycje cennika (puste = wszystkie)
+  reportPayer: "", // "" = wszyscy, "prywatny", "ubezpieczenie" (wszyscy ubezpieczyciele) albo id zakładu
+  signUpMode: false,
+  dict: { rodzaje: [], fizjo: [], ubezp: [], stawki: [] },
+};
+
+async function loadDicts() {
+  const [rodzaje, fizjo, ubezp, stawki] = await Promise.all([
+    api.listDict("rodzaje"), api.listDict("fizjo"), api.listDict("ubezp"),
+    api.listDict("stawki").catch(() => []),
+  ]);
+  state.dict = { rodzaje, fizjo, ubezp, stawki };
+}
+const byId = (key, id) => state.dict[key].find((x) => x.id === id) || null;
+const active = (key) => state.dict[key].filter((x) => x.aktywny !== false);
+const priceList = (ubezpId) => state.dict.rodzaje.filter((r) => (r.ubezpieczyciel_id || null) === (ubezpId || null));
+const rodzajLabel = (r) => `${r.nazwa} · ${r.czas_trwania} min${r.cena != null ? " · " + fmt.money(r.cena) : ""}`;
+// Stawka fizjoterapeuty: indywidualna → domyślna pozycji cennika → brak
+function rateFor(rodzaj_id, fizjo_id) {
+  if (!rodzaj_id || !fizjo_id) return null;
+  const s = state.dict.stawki.find((x) => x.rodzaj_id === rodzaj_id && x.fizjoterapeuta_id === fizjo_id);
+  if (s) return +s.kwota;
+  const r = byId("rodzaje", rodzaj_id);
+  return r?.wynagrodzenie != null ? +r.wynagrodzenie : null;
+}
+// Kwota dla fizjoterapeuty za wizytę: zapisana przy wizycie albo wyliczona z cennika
+const payout = (v) => (v.wynagrodzenie != null ? +v.wynagrodzenie : rateFor(v.rodzaj_id, v.fizjoterapeuta_id));
+const fizjoName = (id) => { const f = byId("fizjo", id); return f ? personName(f) : ""; };
+const payerName = (v) => v.platnik === "ubezpieczenie" ? (byId("ubezp", v.ubezpieczyciel_id)?.nazwa || "Ubezpieczenie") : "Prywatnie";
+
+function route() {
+  const [, name = "wizyty", id, sub] = location.hash.split("/");
+  return { name, id, sub };
+}
+
+async function render() {
+  if (!state.user) return;
+  const { name, id, sub } = route();
+  const navName = name === "pacjent" ? "pacjenci" : name;
+  $$(".nav a").forEach((a) => a.classList.toggle("active", a.dataset.nav === navName));
+  $("#fab").hidden = name === "raport" || name === "ustawienia";
+  $("#fab").setAttribute("aria-label", name === "pacjenci" ? "Nowy pacjent" : "Nowa wizyta");
+  const view = $("#view");
+  try {
+    if (name === "pacjenci") await viewPatients(view);
+    else if (name === "pacjent") await viewPatient(view, id);
+    else if (name === "raport") await viewReport(view);
+    else if (name === "ustawienia") await viewSettings(view, id || "rodzaje", sub);
+    else await viewVisits(view);
+    addThemeButton(view);
+  } catch (err) {
+    console.error(err);
+    view.innerHTML = `<div class="card empty">Nie udało się wczytać danych.<br><small>${esc(polishError(err))}</small><br><button class="btn" onclick="location.reload()">Spróbuj ponownie</button></div>`;
+  }
+}
+
+function fizjoFilterSelect(id, value) {
+  const list = state.dict.fizjo;
+  if (!list.length) return "";
+  return `<select class="select-sm" id="${id}" aria-label="Fizjoterapeuta">
+    <option value="">Wszyscy fizjoterapeuci</option>
+    ${list.map((f) => `<option value="${esc(f.id)}" ${f.id === value ? "selected" : ""}>${esc(personName(f))}${f.aktywny === false ? " (nieaktywny)" : ""}</option>`).join("")}
+  </select>`;
+}
+
+// =====================================================================
+//  WIDOK: WIZYTY
+// =====================================================================
+function visitItem(v, { showDate = false } = {}) {
+  const end = new Date(new Date(v.data_wizyty).getTime() + (v.czas_trwania || 0) * 60000);
+  const unpaid = v.status === "odbyta" && v.kwota > 0 && !v.oplacona;
+  const f = byId("fizjo", v.fizjoterapeuta_id);
+  const fz = f ? `<span class="fz"><i style="background:${esc(f.kolor)}"></i>${esc(personName(f))}</span>` : "";
+  const who = showDate
+    ? `<b>${esc(v.rodzaj || "Wizyta")}${v.kwota != null ? " · " + esc(fmt.money(v.kwota)) : ""}</b><span>${fz}</span>` +
+      (v.opis ? `<span class="visit-notes">${esc(v.opis.slice(0, 140))}${v.opis.length > 140 ? "…" : ""}</span>` : "")
+    : `<b>${esc(fullName(v.pacjent))}</b><span>${esc(v.rodzaj || "Wizyta")}${fz ? " · " : ""}${fz}</span>`;
+  return `<li><button class="item${showDate ? " dated" : ""}" data-visit="${esc(v.id)}" ${f ? `style="--fz:${esc(f.kolor)}"` : ""}>
+    <div class="time">${showDate ? esc(fmt.date(v.data_wizyty)) + "<small>" + esc(fmt.time(v.data_wizyty)) + "</small>"
+      : esc(fmt.time(v.data_wizyty)) + "<small>do " + esc(fmt.time(end)) + "</small>"}</div>
+    <div class="who">${who}</div>
+    <div class="meta">
+      <span class="badge b-${esc(v.status)}">${esc(STATUSY[v.status] || v.status)}</span>
+      ${v.platnik === "ubezpieczenie" ? `<span class="badge b-ubezp">${esc(payerName(v))}</span>` : ""}
+      ${unpaid ? '<span class="badge b-nieoplacona">Nieopłacona</span>' : ""}
+    </div>
+  </button></li>`;
+}
+
+async function viewVisits(view) {
+  let from, to, label;
+  if (state.mode === "tydzien") {
+    from = startOfWeek(state.day); to = addDays(from, 7);
+    label = `${fmt.date(from)} – ${fmt.date(addDays(to, -1))}`;
+  } else if (state.mode === "nadchodzace") {
+    from = new Date(); to = addDays(startOfDay(new Date()), 60);
+    label = "Najbliższe 60 dni";
+  } else {
+    from = state.day; to = addDays(from, 1);
+    label = sameDay(from, new Date()) ? "Dziś, " + fmt.day(from) : cap(fmt.day(from));
+  }
+
+  view.innerHTML = `
+    <div class="page-head"><h1>Wizyty</h1>
+      <div class="actions"><button class="btn btn-primary hide-sm" id="add-visit">+ Nowa wizyta</button></div>
+    </div>
+    <div class="daybar">
+      <div class="seg" role="tablist">
+        <button data-mode="dzien" class="${state.mode === "dzien" ? "on" : ""}">Dzień</button>
+        <button data-mode="tydzien" class="${state.mode === "tydzien" ? "on" : ""}">Tydzień</button>
+        <button data-mode="nadchodzace" class="${state.mode === "nadchodzace" ? "on" : ""}">Nadchodzące</button>
+      </div>
+      ${state.mode !== "nadchodzace" ? `<div class="daynav">
+      <button class="btn btn-sm" id="prev" aria-label="Wstecz">‹</button>
+      <button class="btn btn-sm" id="today">Dziś</button>
+      <button class="btn btn-sm" id="next" aria-label="Dalej">›</button>
+      <input type="date" id="pick" value="${toDateInput(state.day)}" aria-label="Wybierz datę"></div>` : ""}
+      ${fizjoFilterSelect("fizjo-filter", state.fizjo)}
+    </div>
+    <div class="daybar"><div class="date-label">${esc(label)}</div></div>
+    <div id="stats"></div>
+    <div class="card"><div class="loading">Wczytywanie…</div></div>`;
+
+  $$("[data-mode]", view).forEach((b) => b.onclick = () => { state.mode = b.dataset.mode; render(); });
+  const step = state.mode === "tydzien" ? 7 : 1;
+  $("#prev", view)?.addEventListener("click", () => { state.day = addDays(state.day, -step); render(); });
+  $("#next", view)?.addEventListener("click", () => { state.day = addDays(state.day, step); render(); });
+  $("#today", view)?.addEventListener("click", () => { state.day = startOfDay(new Date()); render(); });
+  $("#pick", view)?.addEventListener("change", (e) => { if (e.target.value) { state.day = fromDateInput(e.target.value); render(); } });
+  $("#fizjo-filter", view)?.addEventListener("change", (e) => { state.fizjo = e.target.value; render(); });
+  $("#add-visit", view).onclick = () => visitModal({ data_wizyty: defaultVisitDate() });
+
+  let visits = await api.listVisits(from, to);
+  if (state.fizjo) visits = visits.filter((v) => v.fizjoterapeuta_id === state.fizjo);
+  const done = visits.filter((v) => v.status === "odbyta");
+  $("#stats", view).innerHTML = `<div class="stats">
+    <div class="stat"><b>${visits.length}</b><span>Wszystkie wizyty</span></div>
+    <div class="stat"><b>${visits.filter((v) => v.status === "zaplanowana").length}</b><span>Zaplanowane</span></div>
+    <div class="stat"><b>${done.length}</b><span>Odbyte</span></div>
+    <div class="stat"><b>${fmt.money(done.reduce((s, v) => s + (+v.kwota || 0), 0))}</b><span>Przychód (odbyte)</span></div>
+  </div>`;
+
+  const card = $(".card", view);
+  if (!visits.length) {
+    card.innerHTML = `<div class="empty">Brak wizyt w tym okresie.<br><button class="btn btn-primary" id="empty-add">+ Dodaj wizytę</button></div>`;
+    $("#empty-add", card).onclick = () => visitModal({ data_wizyty: defaultVisitDate() });
+    return;
+  }
+  if (state.mode === "dzien") {
+    card.innerHTML = `<ul class="list">${visits.map((v) => visitItem(v)).join("")}</ul>`;
+  } else {
+    const groups = new Map();
+    visits.forEach((v) => {
+      const k = toDateInput(new Date(v.data_wizyty));
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k).push(v);
+    });
+    card.innerHTML = [...groups].map(([k, list]) =>
+      `<div class="group-head">${esc(cap(fmt.day(fromDateInput(k))))}</div><ul class="list">${list.map((v) => visitItem(v)).join("")}</ul>`).join("");
+  }
+  bindVisitClicks(card, visits);
+}
+
+function bindVisitClicks(root, visits) {
+  $$("[data-visit]", root).forEach((b) => b.onclick = () => visitModal(visits.find((v) => v.id === b.dataset.visit)));
+}
+
+function defaultVisitDate() {
+  const d = new Date(state.day);
+  const now = new Date();
+  if (sameDay(d, now) && now.getHours() >= 7 && now.getHours() < 20) d.setHours(now.getHours() + 1, 0, 0, 0);
+  else d.setHours(9, 0, 0, 0);
+  return d.toISOString();
+}
+
+// =====================================================================
+//  WIDOK: PACJENCI
+// =====================================================================
+async function viewPatients(view) {
+  view.innerHTML = `
+    <div class="page-head"><h1>Pacjenci</h1>
+      <div class="actions"><button class="btn btn-primary hide-sm" id="add-patient">+ Nowy pacjent</button></div>
+    </div>
+    <div class="toolbar"><input class="search" type="search" id="q" placeholder="Szukaj: imię, nazwisko, PESEL, telefon…" value="${esc(state.search)}"></div>
+    <div class="card"><div class="loading">Wczytywanie…</div></div>`;
+  $("#add-patient", view).onclick = () => patientModal({});
+
+  const patients = await api.listPatients();
+  const card = $(".card", view);
+  const draw = () => {
+    if (!patients.length) {
+      card.innerHTML = `<div class="empty">Nie masz jeszcze żadnych pacjentów.<br><button class="btn btn-primary" id="e-add">+ Dodaj pierwszego pacjenta</button></div>`;
+      $("#e-add", card).onclick = () => patientModal({});
+      return;
+    }
+    const list = matchPatients(patients, state.search);
+    if (!list.length) { card.innerHTML = `<div class="empty">Brak wyników dla „${esc(state.search)}”.</div>`; return; }
+    card.innerHTML = `<ul class="list">${list.map((p) => `<li><a class="item patient" href="#/pacjent/${esc(p.id)}" style="text-decoration:none">
+      <div class="avatar">${esc(initials(p))}</div>
+      <div class="who"><b>${esc(fullName(p))}</b><span>${esc([p.telefon, p.pesel ? "PESEL " + p.pesel : ""].filter(Boolean).join(" · ") || "—")}</span></div>
+      <div class="meta">${p.platnik === "ubezpieczenie" ? `<span class="badge b-ubezp">${esc(patientPayerLabel(p))}</span>` : ""}<span class="muted">›</span></div></a></li>`).join("")}</ul>`;
+  };
+  draw();
+  $("#q", view).oninput = (e) => { state.search = e.target.value; draw(); };
+}
+
+// =====================================================================
+//  WIDOK: KARTA PACJENTA
+// =====================================================================
+async function viewPatient(view, id) {
+  view.innerHTML = `<div class="loading">Wczytywanie…</div>`;
+  const [p, visits] = await Promise.all([api.getPatient(id), api.listPatientVisits(id)]);
+  if (!p) { view.innerHTML = `<a class="back" href="#/pacjenci">‹ Pacjenci</a><div class="card empty">Nie znaleziono pacjenta.</div>`; return; }
+
+  const done = visits.filter((v) => v.status === "odbyta");
+  const unpaid = done.filter((v) => v.kwota > 0 && !v.oplacona).reduce((s, v) => s + +v.kwota, 0);
+  const field = (label, val) => val ? `<div><dt>${label}</dt><dd>${esc(val)}</dd></div>` : "";
+  const insurers = [...new Set(visits.filter((v) => v.platnik === "ubezpieczenie").map(payerName))];
+
+  view.innerHTML = `
+    <a class="back" href="#/pacjenci">‹ Pacjenci</a>
+    <div class="page-head"><h1>${esc(p.imie)} ${esc(p.nazwisko)}</h1>
+      <div class="actions">
+        <button class="btn" id="edit">Edytuj dane</button>
+        <button class="btn btn-primary hide-sm" id="add-visit">+ Nowa wizyta</button>
+      </div>
+    </div>
+    <div class="detail">
+      <div class="card info">
+        <dl>
+          ${field("PESEL", p.pesel)}
+          ${field("Data urodzenia", p.data_urodzenia && fmt.date(p.data_urodzenia))}
+          ${p.telefon ? `<div><dt>Telefon</dt><dd><a href="tel:${esc(p.telefon.replace(/\s/g, ""))}">${esc(p.telefon)}</a></dd></div>` : ""}
+          ${p.email ? `<div><dt>E-mail</dt><dd><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></dd></div>` : ""}
+          ${field("Adres", p.adres)}
+          <div><dt>Płatnik</dt><dd>${esc(patientPayerLabel(p))}${p.platnik === "ubezpieczenie" && p.nr_polisy ? " · nr " + esc(p.nr_polisy) : ""}</dd></div>
+          ${field("Ubezpieczenia w wizytach", insurers.filter((x) => x !== patientPayerLabel(p)).join(", "))}
+          ${field("Notatki", p.notatki)}
+          <div><dt>Wizyty</dt><dd>${visits.length} łącznie, ${done.length} odbytych</dd></div>
+          ${unpaid ? `<div><dt>Do zapłaty</dt><dd style="color:var(--warn);font-weight:650">${fmt.money(unpaid)}</dd></div>` : ""}
+        </dl>
+      </div>
+      <div>
+        <h3>Historia wizyt</h3>
+        <div class="card">${visits.length
+          ? `<ul class="list">${visits.map((v) => visitItem(v, { showDate: true })).join("")}</ul>`
+          : `<div class="empty">Brak wizyt.</div>`}</div>
+      </div>
+    </div>`;
+  $("#edit", view).onclick = () => patientModal(p);
+  $("#add-visit", view).onclick = () => visitModal({ pacjent_id: p.id, pacjent: p, data_wizyty: defaultVisitDate() });
+  bindVisitClicks(view, visits);
+}
+
+// =====================================================================
+//  WIDOK: RAPORT MIESIĘCZNY
+// =====================================================================
+async function viewReport(view) {
+  const [y, m] = state.month.split("-").map(Number);
+  const from = new Date(y, m - 1, 1), to = new Date(y, m, 1);
+  const fz = state.reportFizjo ? byId("fizjo", state.reportFizjo) : null;
+
+  // Grupy pozycji cennika do filtra: prywatne + każdy ubezpieczyciel
+  const groups = [{ id: "", name: "Wizyty prywatne", items: priceList(null) },
+    ...state.dict.ubezp.map((u) => ({ id: u.id, name: u.nazwa, items: priceList(u.id) }))].filter((g) => g.items.length);
+  const typesSet = new Set(state.reportTypes.filter((id) => byId("rodzaje", id)));
+  const typesLabel = () => !typesSet.size ? "Wszystkie rodzaje wizyt"
+    : typesSet.size === 1 ? byId("rodzaje", [...typesSet][0])?.nazwa : `Rodzaje wizyt: ${typesSet.size} wybrane`;
+
+  view.innerHTML = `
+    <div class="page-head"><h1>Raport</h1>
+      <div class="actions">
+        <button class="btn" id="csv">Eksport CSV</button>
+        <button class="btn hide-sm" onclick="print()">Drukuj</button>
+      </div>
+    </div>
+    <div class="daybar filters"><input type="month" id="month" value="${esc(state.month)}" aria-label="Miesiąc">
+      ${fizjoFilterSelect("rep-fizjo", state.reportFizjo)}
+      <select class="select-sm" id="rep-payer" aria-label="Płatnik">
+        <option value="">Wszyscy płatnicy</option>
+        <option value="prywatny" ${state.reportPayer === "prywatny" ? "selected" : ""}>Prywatni</option>
+        <option value="ubezpieczenie" ${state.reportPayer === "ubezpieczenie" ? "selected" : ""}>Wszyscy ubezpieczyciele</option>
+        ${state.dict.ubezp.length ? `<optgroup label="Ubezpieczyciel">${state.dict.ubezp.map((u) =>
+          `<option value="${esc(u.id)}" ${state.reportPayer === u.id ? "selected" : ""}>${esc(u.nazwa)}${u.aktywny === false ? " (nieaktywny)" : ""}</option>`).join("")}</optgroup>` : ""}
+      </select>
+      <details class="multi" id="rep-types">
+        <summary class="select-sm"><span id="types-label">${esc(typesLabel())}</span></summary>
+        <div class="multi-panel">
+          <input type="search" class="multi-search" placeholder="Szukaj wizyty…" aria-label="Szukaj rodzaju wizyty">
+          <div class="multi-actions"><button type="button" class="link" data-all>Zaznacz wszystkie</button><button type="button" class="link" data-none>Wyczyść</button></div>
+          <div class="multi-list">${groups.length ? groups.map((g) => `<div class="multi-group">
+            <button type="button" class="multi-group-head" data-group="${esc(g.id)}">${esc(g.name)}</button>
+            ${g.items.map((r) => `<label data-name="${esc(norm(r.nazwa + " " + (r.kod || "") + " " + g.name))}"><input type="checkbox" value="${esc(r.id)}" ${typesSet.has(r.id) ? "checked" : ""}>
+              <span>${esc(r.nazwa)}${r.kod ? ` <small>${esc(r.kod)}</small>` : ""}${r.aktywny === false ? " <small>(nieaktywna)</small>" : ""}</span></label>`).join("")}
+          </div>`).join("") : `<p class="muted">Brak pozycji w cennikach.</p>`}</div>
+        </div>
+      </details>
+      <button class="btn btn-sm btn-ghost" id="rep-clear" ${state.reportFizjo || state.reportPayer || typesSet.size ? "" : "hidden"}>Wyczyść filtry</button>
+    </div>
+    <div id="stats"></div>
+    <div id="payers"></div>
+    <div class="card" id="rep-table"><div class="loading">Wczytywanie…</div></div>`;
+
+  $("#month", view).onchange = (e) => { if (e.target.value) { state.month = e.target.value; render(); } };
+  $("#rep-fizjo", view)?.addEventListener("change", (e) => { state.reportFizjo = e.target.value; render(); });
+  $("#rep-payer", view).onchange = (e) => { state.reportPayer = e.target.value; render(); };
+  $("#rep-clear", view).onclick = () => { state.reportFizjo = ""; state.reportPayer = ""; state.reportTypes = []; render(); };
+
+  const allVisits = await api.listVisits(from, to);
+  let visits = [];
+  const sum = (arr, f = (v) => +v.kwota || 0) => arr.reduce((s, v) => s + f(v), 0);
+  const payOf = (v) => (v.status === "odbyta" ? payout(v) || 0 : 0);
+
+  const draw = () => {
+    visits = allVisits;
+    if (state.reportFizjo) visits = visits.filter((v) => v.fizjoterapeuta_id === state.reportFizjo);
+    if (state.reportPayer === "prywatny") visits = visits.filter((v) => v.platnik !== "ubezpieczenie");
+    else if (state.reportPayer === "ubezpieczenie") visits = visits.filter((v) => v.platnik === "ubezpieczenie");
+    else if (state.reportPayer) visits = visits.filter((v) => v.platnik === "ubezpieczenie" && v.ubezpieczyciel_id === state.reportPayer);
+    if (typesSet.size) visits = visits.filter((v) => typesSet.has(v.rodzaj_id));
+
+    const done = visits.filter((v) => v.status === "odbyta");
+    const payTotal = sum(done, payOf);
+    $("#stats", view).innerHTML = `<div class="stats">
+      <div class="stat"><b>${done.length}</b><span>Odbyte wizyty</span></div>
+      <div class="stat"><b>${fmt.money(sum(done))}</b><span>Przychód</span></div>
+      <div class="stat"><b>${fmt.money(sum(done.filter((v) => !v.oplacona)))}</b><span>Nieopłacone</span></div>
+      <div class="stat stat-accent"><b>${fmt.money(payTotal)}</b><span>${fz ? "Do wypłaty: " + esc(personName(fz)) : "Wynagrodzenia fizjoterapeutów"}</span></div>
+    </div>`;
+
+    if (done.length) {
+      const g = new Map();
+      done.forEach((v) => { const k = payerName(v); g.set(k, [...(g.get(k) || []), v]); });
+      $("#payers", view).innerHTML = `<h3>Według płatnika (odbyte)</h3><div class="card" style="margin-bottom:18px"><div class="table-wrap"><table>
+        <thead><tr><th>Płatnik</th><th class="num">Wizyty</th><th class="num">Kwota</th><th class="num">Nieopłacone</th><th class="num">Dla fizjoterapeutów</th></tr></thead>
+        <tbody>${[...g].sort((a, b) => a[0] === "Prywatnie" ? -1 : b[0] === "Prywatnie" ? 1 : a[0].localeCompare(b[0], "pl"))
+          .map(([k, l]) => `<tr><td>${esc(k)}</td><td class="num">${l.length}</td><td class="num">${fmt.money(sum(l))}</td><td class="num">${fmt.money(sum(l.filter((v) => !v.oplacona)))}</td><td class="num">${fmt.money(sum(l, payOf))}</td></tr>`).join("")}</tbody>
+      </table></div></div>`;
+    } else $("#payers", view).innerHTML = "";
+
+    const card = $("#rep-table", view);
+    if (!visits.length) { card.innerHTML = `<div class="empty">Brak wizyt dla wybranych filtrów.</div>`; return; }
+    card.innerHTML = `<div class="table-wrap"><table class="report">
+      <thead><tr><th>Data</th><th>Pacjent</th><th>Wizyta</th>${fz ? "" : "<th>Fizjoterapeuta</th>"}<th>Płatnik</th><th>Status</th><th class="num">Kwota</th><th class="num pay-col">Dla fizjo&shy;terapeuty</th></tr></thead>
+      <tbody>${visits.map((v) => {
+        const p = payout(v);
+        const counted = v.status === "odbyta";
+        return `<tr data-visit="${esc(v.id)}" class="${counted ? "" : "row-muted"}">
+          <td class="c-date">${esc(new Date(v.data_wizyty).toLocaleDateString("pl-PL", { day: "2-digit", month: "2-digit" }))}<small class="muted"> ${esc(fmt.time(v.data_wizyty))}</small></td>
+          <td class="c-pat">${esc(fullName(v.pacjent))}</td><td class="wrap c-type">${esc(v.rodzaj || "")}</td>
+          ${fz ? "" : `<td class="c-fz">${esc(fizjoName(v.fizjoterapeuta_id))}</td>`}<td class="wrap c-payer">${esc(payerName(v))}</td>
+          <td class="c-status"><span class="badge b-${esc(v.status)}">${esc(STATUSY[v.status])}</span></td>
+          <td class="num c-amount">${v.kwota != null ? esc(fmt.money(v.kwota)) : ""}${v.status === "odbyta" && v.kwota > 0 && !v.oplacona ? `<br><small class="unpaid">nieopłacona</small>` : ""}</td>
+          <td class="num pay-col"><button type="button" class="pay-btn ${v.wynagrodzenie == null ? "calc" : ""}" data-pay="${esc(v.id)}"
+            title="Kliknij, aby zmienić kwotę dla fizjoterapeuty">${p != null ? esc(fmt.money(p)) : "—"}</button></td></tr>`;
+      }).join("")}
+      </tbody>
+      <tfoot><tr><td colspan="${fz ? 5 : 6}" class="c-sumlabel">Suma${fz ? " do wypłaty — " + esc(personName(fz)) : ""} <span class="muted">(tylko wizyty odbyte)</span></td>
+        <td class="num c-amount">${fmt.money(sum(done))}</td><td class="num pay-col"><b>${fmt.money(payTotal)}</b></td></tr></tfoot>
+      </table></div>`;
+    bindVisitClicks(card, visits);
+    $$("[data-pay]", card).forEach((btn) => btn.onclick = (e) => { e.stopPropagation(); editPay(btn); });
+  };
+
+  // Edycja kwoty dla fizjoterapeuty bezpośrednio w tabeli
+  const editPay = (btn) => {
+    const v = allVisits.find((x) => x.id === btn.dataset.pay);
+    const td = btn.parentElement;
+    const cur = payout(v);
+    td.innerHTML = `<input type="text" class="pay-input" inputmode="decimal" autocomplete="off" value="${cur != null ? String(cur).replace(".", ",") : ""}" placeholder="z cennika" aria-label="Kwota dla fizjoterapeuty">`;
+    const input = $("input", td);
+    input.onclick = (e) => e.stopPropagation();
+    input.focus(); input.select();
+    let done = false;
+    const finish = async (saveIt) => {
+      if (done) return; done = true;
+      if (saveIt) {
+        const raw = input.value.trim();
+        const val = raw === "" ? null : Math.round(+raw.replace(/\s|zł/g, "").replace(",", ".") * 100) / 100;
+        if (val != null && (isNaN(val) || val < 0)) { toast("Podaj poprawną kwotę"); done = false; input.focus(); return; }
+        if (val !== (v.wynagrodzenie != null ? +v.wynagrodzenie : null)) {
+          try {
+            await api.saveVisit({ id: v.id, wynagrodzenie: val });
+            v.wynagrodzenie = val;
+            toast(val == null ? "Przywrócono stawkę z cennika" : "Zapisano kwotę dla fizjoterapeuty");
+          } catch (err) { toast(polishError(err)); }
+        }
+      }
+      draw();
+    };
+    input.onkeydown = (e) => {
+      if (e.key === "Enter") { e.preventDefault(); finish(true); }
+      else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); finish(false); }
+    };
+    input.onblur = () => finish(true);
+  };
+
+  // Filtr rodzajów wizyt (wielokrotny wybór)
+  const det = $("#rep-types", view);
+  const applyTypes = () => {
+    state.reportTypes = [...typesSet];
+    $("#types-label", view).textContent = typesLabel();
+    det.classList.toggle("on", typesSet.size > 0);
+    $("#rep-clear", view).hidden = !(state.reportFizjo || state.reportPayer || typesSet.size);
+    draw();
+  };
+  det.classList.toggle("on", typesSet.size > 0);
+  $$('.multi-list input[type="checkbox"]', det).forEach((c) => c.onchange = () => { c.checked ? typesSet.add(c.value) : typesSet.delete(c.value); applyTypes(); });
+  const visibleBoxes = () => $$(".multi-list label", det).filter((l) => !l.hidden).map((l) => $("input", l));
+  $("[data-all]", det).onclick = () => { visibleBoxes().forEach((c) => { c.checked = true; typesSet.add(c.value); }); applyTypes(); };
+  $("[data-none]", det).onclick = () => { $$('.multi-list input', det).forEach((c) => (c.checked = false)); typesSet.clear(); applyTypes(); };
+  $$("[data-group]", det).forEach((h) => h.onclick = () => {
+    const boxes = $$("input", h.parentElement);
+    const all = boxes.every((c) => c.checked);
+    boxes.forEach((c) => { c.checked = !all; all ? typesSet.delete(c.value) : typesSet.add(c.value); });
+    applyTypes();
+  });
+  $(".multi-search", det).oninput = (e) => {
+    const q = norm(e.target.value);
+    $$(".multi-group", det).forEach((g) => {
+      let any = false;
+      $$("label", g).forEach((l) => { l.hidden = q && !l.dataset.name.includes(q); any ||= !l.hidden; });
+      g.hidden = !any;
+    });
+  };
+
+  draw();
+
+  $("#csv", view).onclick = () => {
+    const head = ["Data", "Godzina", "Nazwisko", "Imię", "PESEL", "Rodzaj", "Kod usługi", "Czas (min)", "Fizjoterapeuta", "Płatnik", "Nr autoryzacji",
+      "Status", "Kwota", "Opłacona", "Dla fizjoterapeuty", "Opis", "Zalecenia"];
+    const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
+    const money = (n) => (n != null ? String(n).replace(".", ",") : "");
+    const rows = visits.map((v) => [fmt.date(v.data_wizyty), fmt.time(v.data_wizyty), v.pacjent?.nazwisko, v.pacjent?.imie, v.pacjent?.pesel,
+      v.rodzaj, byId("rodzaje", v.rodzaj_id)?.kod || "", v.czas_trwania, fizjoName(v.fizjoterapeuta_id), payerName(v), v.nr_autoryzacji, STATUSY[v.status],
+      money(v.kwota), v.oplacona ? "tak" : "nie", money(payout(v)), v.opis, v.zalecenia]);
+    const done = visits.filter((v) => v.status === "odbyta");
+    rows.push([], ["Suma (odbyte)", "", "", "", "", "", "", "", "", "", "", "", money(sum(done)), "", money(sum(done, payOf))]);
+    const csv = "﻿" + [head, ...rows].map((r) => r.map(q).join(";")).join("\r\n");
+    const slug = (s) => norm(s).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const parts = [state.month,
+      fz ? slug(personName(fz)) : "",
+      state.reportPayer === "prywatny" ? "prywatni" : state.reportPayer === "ubezpieczenie" ? "ubezpieczyciele" : state.reportPayer ? slug(byId("ubezp", state.reportPayer)?.nazwa || "") : ""].filter(Boolean);
+    const a = Object.assign(document.createElement("a"), {
+      href: URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })),
+      download: `wizyty-${parts.join("-")}.csv`,
+    });
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+}
+
+// =====================================================================
+//  WIDOK: USTAWIENIA (rodzaje wizyt, fizjoterapeuci, ubezpieczyciele)
+// =====================================================================
+async function viewSettings(view, tab, sub) {
+  await loadDicts();
+  if (tab === "ubezp" && sub) return viewInsurer(view, sub);
+  const tabs = { rodzaje: "Wizyty prywatne", ubezp: "Ubezpieczyciele", fizjo: "Fizjoterapeuci", konto: "Konto" };
+  if (!tabs[tab]) tab = "rodzaje";
+  const addLabel = { rodzaje: "+ Nowa wizyta w cenniku", fizjo: "+ Nowy fizjoterapeuta", ubezp: "+ Nowy ubezpieczyciel" }[tab];
+  view.innerHTML = `
+    <div class="page-head"><h1>Ustawienia</h1><div class="actions"></div></div>
+    <div class="tabs">${Object.entries(tabs).map(([k, l]) => `<a href="#/ustawienia/${k}" class="${k === tab ? "on" : ""}">${l}</a>`).join("")}</div>
+    <div id="settings-body"></div>`;
+  const body = $("#settings-body", view);
+
+  if (tab === "konto") {
+    body.innerHTML = `<div class="card info">
+      <dl><div><dt>Zalogowano jako</dt><dd>${esc(state.user?.email || "")}</dd></div>
+      ${DEMO ? `<div><dt>Tryb</dt><dd>Demo — dane tylko w tej przeglądarce</dd></div>` : ""}</dl>
+      <div><button class="btn" id="logout-s">${DEMO ? "Wyczyść dane demo" : "Wyloguj"}</button></div></div>`;
+    $("#logout-s", body).onclick = logout;
+    return;
+  }
+
+  const items = tab === "rodzaje" ? priceList(null) : state.dict[tab];
+  const row = (x) => {
+    let title, sub, lead = "";
+    if (tab === "rodzaje") { title = x.nazwa; sub = rodzajSub(x); }
+    else if (tab === "fizjo") {
+      title = personName(x); sub = [x.telefon, x.email].filter(Boolean).join(" · ") || "—";
+      lead = `<div class="avatar" style="background:${esc(x.kolor)};color:#fff">${esc(initials(x))}</div>`;
+    } else {
+      const n = priceList(x.id).length;
+      title = x.nazwa; sub = [`${n} ${n === 1 ? "wizyta" : n > 1 && n < 5 ? "wizyty" : "wizyt"} w cenniku`, x.nip ? "NIP " + x.nip : "", x.telefon].filter(Boolean).join(" · ");
+    }
+    return `<li><button class="item ${lead ? "patient" : "plain"}" data-id="${esc(x.id)}">
+      ${lead}<div class="who"><b>${esc(title)}</b><span>${esc(sub)}</span></div>
+      <div class="meta">${x.aktywny === false ? '<span class="badge b-odwolana">Nieaktywny</span>' : '<span class="muted">›</span>'}</div>
+    </button></li>`;
+  };
+  const hints = {
+    rodzaje: "Cennik wizyt prywatnych. Przy wizycie prywatnej wybierasz z tej listy — podpowie czas trwania i cenę.",
+    fizjo: "Fizjoterapeuci, których można przypisać do wizyty. Kolor wyróżnia ich wizyty w kalendarzu.",
+    ubezp: "Zakłady ubezpieczeń, z którymi współpracujesz. Kliknij zakład, aby ustawić jego własny cennik wizyt.",
+  };
+  body.innerHTML = `
+    <div class="toolbar" style="justify-content:space-between;align-items:center;flex-wrap:wrap">
+      <p class="muted" style="margin:0;flex:1;min-width:220px">${hints[tab]}</p>
+      <button class="btn btn-primary" id="dict-add">${addLabel}</button>
+    </div>
+    <div class="card">${items.length ? `<ul class="list">${items.map(row).join("")}</ul>` : `<div class="empty">Brak pozycji. Dodaj pierwszą.</div>`}</div>`;
+  $("#dict-add", body).onclick = () => dictModal(tab, {});
+  $$("[data-id]", body).forEach((b) => b.onclick = () => {
+    if (tab === "ubezp") location.hash = `#/ustawienia/ubezp/${b.dataset.id}`;
+    else dictModal(tab, items.find((x) => x.id === b.dataset.id));
+  });
+}
+
+const rodzajSub = (r) => {
+  const own = state.dict.stawki.filter((s) => s.rodzaj_id === r.id).length;
+  return [r.kod ? "kod " + r.kod : "", `${r.czas_trwania} min`, r.cena != null ? fmt.money(r.cena) : "",
+    r.wynagrodzenie != null ? "fizjo " + fmt.money(r.wynagrodzenie) : "", own ? `${own} ${own === 1 ? "stawka indywidualna" : "stawki indywidualne"}` : ""].filter(Boolean).join(" · ");
+};
+
+// Szczegóły ubezpieczyciela + jego cennik wizyt
+function viewInsurer(view, id) {
+  const u = byId("ubezp", id);
+  if (!u) { view.innerHTML = `<a class="back" href="#/ustawienia/ubezp">‹ Ubezpieczyciele</a><div class="card empty">Nie znaleziono ubezpieczyciela.</div>`; return; }
+  const list = priceList(u.id);
+  view.innerHTML = `
+    <a class="back" href="#/ustawienia/ubezp">‹ Ubezpieczyciele</a>
+    <div class="page-head"><h1>${esc(u.nazwa)}</h1>
+      <div class="actions"><button class="btn" id="ins-edit">Edytuj dane</button></div>
+    </div>
+    <div class="detail">
+      <div class="card info"><dl>
+        ${u.aktywny === false ? `<div><dt>Status</dt><dd>Nieaktywny</dd></div>` : ""}
+        ${u.nip ? `<div><dt>NIP</dt><dd>${esc(u.nip)}</dd></div>` : ""}
+        ${u.telefon ? `<div><dt>Telefon</dt><dd>${esc(u.telefon)}</dd></div>` : ""}
+        ${u.email ? `<div><dt>E-mail</dt><dd>${esc(u.email)}</dd></div>` : ""}
+        ${u.uwagi ? `<div><dt>Uwagi</dt><dd>${esc(u.uwagi)}</dd></div>` : ""}
+        <div><dt>Cennik</dt><dd>${list.length} ${list.length === 1 ? "pozycja" : [2,3,4].includes(list.length % 10) && ![12,13,14].includes(list.length % 100) ? "pozycje" : "pozycji"}</dd></div>
+      </dl></div>
+      <div>
+        <div class="toolbar" style="justify-content:space-between;align-items:center">
+          <h3 style="margin:0">Wizyty w cenniku ${esc(u.nazwa)}</h3>
+          <button class="btn btn-primary btn-sm" id="ins-add">+ Dodaj wizytę</button>
+        </div>
+        <div class="card">${list.length ? `<ul class="list">${list.map((r) => `<li><button class="item plain" data-id="${esc(r.id)}">
+            <div class="who"><b>${esc(r.nazwa)}</b><span>${esc(rodzajSub(r))}</span></div>
+            <div class="meta">${r.aktywny === false ? '<span class="badge b-odwolana">Nieaktywna</span>' : '<span class="muted">›</span>'}</div>
+          </button></li>`).join("")}</ul>`
+          : `<div class="empty">Ten zakład nie ma jeszcze cennika.<br>Dodaj wizyty, które obejmuje — z jego nazewnictwem, czasem trwania i ceną.</div>`}</div>
+      </div>
+    </div>`;
+  $("#ins-edit", view).onclick = () => dictModal("ubezp", u);
+  $("#ins-add", view).onclick = () => dictModal("rodzaje", { ubezpieczyciel_id: u.id });
+  $$("[data-id]", view).forEach((b) => b.onclick = () => dictModal("rodzaje", list.find((r) => r.id === b.dataset.id)));
+}
+
+function dictModal(key, x) {
+  const isNew = !x.id;
+  const aktywny = `<label class="check"><input name="aktywny" type="checkbox" ${x.aktywny !== false ? "checked" : ""}> Aktywny (widoczny przy dodawaniu wizyt)</label>`;
+  const forms = {
+    rodzaje: {
+      title: (isNew ? "Nowa wizyta w cenniku" : "Wizyta w cenniku") + " · " + (x.ubezpieczyciel_id ? (byId("ubezp", x.ubezpieczyciel_id)?.nazwa || "") : "prywatny"),
+      body: `<label>Nazwa${x.ubezpieczyciel_id ? " (tak jak w cenniku ubezpieczyciela)" : ""} *<input name="nazwa" required value="${esc(x.nazwa)}" placeholder="np. Terapia manualna"></label>
+        <label>Kod usługi${x.ubezpieczyciel_id ? " u ubezpieczyciela" : ""}<input name="kod" value="${esc(x.kod)}" placeholder="opcjonalnie" autocomplete="off"></label>
+        <div class="row">
+          <label>Czas trwania (min) *<input name="czas_trwania" type="number" min="5" max="600" step="5" required value="${esc(x.czas_trwania ?? 45)}"></label>
+          <label>Cena (zł)<input name="cena" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(x.cena)}"></label>
+        </div>
+        <fieldset class="rates">
+          <legend>Wynagrodzenie fizjoterapeuty za tę wizytę</legend>
+          <label>Stawka domyślna (zł)<input name="wynagrodzenie" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(x.wynagrodzenie)}" placeholder="np. 60"></label>
+          ${state.dict.fizjo.length ? `<p class="muted rates-hint">Stawki indywidualne — zostaw puste, aby obowiązywała stawka domyślna.</p>
+          <div class="rates-grid">${state.dict.fizjo.map((f) => {
+            const s = x.id ? state.dict.stawki.find((s) => s.rodzaj_id === x.id && s.fizjoterapeuta_id === f.id) : null;
+            return `<label><span class="fz"><i style="background:${esc(f.kolor)}"></i>${esc(personName(f))}${f.aktywny === false ? " (nieaktywny)" : ""}</span>
+              <input name="stawka_${esc(f.id)}" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(s?.kwota)}" data-rate-input></label>`;
+          }).join("")}</div>` : `<p class="muted rates-hint">Dodaj fizjoterapeutów w Ustawieniach, aby ustawić im indywidualne stawki.</p>`}
+        </fieldset>${aktywny}`,
+      onReady: (b) => {
+        const def = $('[name="wynagrodzenie"]', b);
+        const sync = () => $$("[data-rate-input]", b).forEach((i) => (i.placeholder = def.value ? `domyślnie ${def.value}` : "—"));
+        def.addEventListener("input", sync); sync();
+      },
+      read: (fd) => ({ nazwa: val(fd, "nazwa"), kod: val(fd, "kod"), czas_trwania: +val(fd, "czas_trwania"), cena: numOrNull(val(fd, "cena")),
+        wynagrodzenie: numOrNull(val(fd, "wynagrodzenie")), ubezpieczyciel_id: x.ubezpieczyciel_id || null }),
+      after: async (saved, fd) => {
+        const rates = state.dict.fizjo.map((f) => ({ fizjoterapeuta_id: f.id, kwota: numOrNull(val(fd, "stawka_" + f.id)) })).filter((r) => r.kwota != null);
+        await api.saveRates(saved.id, rates);
+      },
+    },
+    fizjo: {
+      title: isNew ? "Nowy fizjoterapeuta" : "Fizjoterapeuta",
+      body: `<div class="row">
+          <label>Imię *<input name="imie" required value="${esc(x.imie)}"></label>
+          <label>Nazwisko *<input name="nazwisko" required value="${esc(x.nazwisko)}"></label>
+        </div>
+        <div class="row">
+          <label>Telefon<input name="telefon" type="tel" value="${esc(x.telefon)}"></label>
+          <label>E-mail<input name="email" type="email" value="${esc(x.email)}"></label>
+        </div>
+        <fieldset class="swatches"><legend>Kolor w kalendarzu</legend>
+          ${KOLORY.map((c, i) => `<label><input type="radio" name="kolor" value="${c}" ${(x.kolor || KOLORY[state.dict.fizjo.length % KOLORY.length]) === c ? "checked" : ""}><span style="background:${c}" aria-label="Kolor ${i + 1}"></span></label>`).join("")}
+        </fieldset>${aktywny}`,
+      read: (fd) => ({ imie: val(fd, "imie"), nazwisko: val(fd, "nazwisko"), telefon: val(fd, "telefon"), email: val(fd, "email"), kolor: val(fd, "kolor") || KOLORY[0] }),
+    },
+    ubezp: {
+      title: isNew ? "Nowy ubezpieczyciel" : "Ubezpieczyciel",
+      body: `<label>Nazwa *<input name="nazwa" required value="${esc(x.nazwa)}" placeholder="np. PZU Zdrowie"></label>
+        <div class="row">
+          <label>NIP<input name="nip" value="${esc(x.nip)}"></label>
+          <label>Telefon<input name="telefon" type="tel" value="${esc(x.telefon)}"></label>
+        </div>
+        <label>E-mail<input name="email" type="email" value="${esc(x.email)}"></label>
+        <label>Uwagi (np. zasady rozliczeń, wymagane dokumenty)<textarea name="uwagi">${esc(x.uwagi)}</textarea></label>${aktywny}`,
+      read: (fd) => ({ nazwa: val(fd, "nazwa"), nip: val(fd, "nip"), telefon: val(fd, "telefon"), email: val(fd, "email"), uwagi: val(fd, "uwagi") }),
+    },
+  };
+  const f = forms[key];
+  openModal({
+    title: f.title,
+    body: f.body,
+    onReady: f.onReady,
+    onSubmit: async (fd) => {
+      const row = { ...f.read(fd), aktywny: fd.get("aktywny") === "on" };
+      if (!isNew) row.id = x.id;
+      const saved = await api.saveDict(key, row);
+      await f.after?.(saved, fd);
+      toast(isNew ? "Dodano" : "Zapisano zmiany");
+      await loadDicts();
+      render();
+    },
+    onDelete: isNew ? null : async () => {
+      const msg = key === "ubezp"
+        ? `Usunąć ubezpieczyciela ${x.nazwa} wraz z jego cennikiem? Dotychczasowe wizyty zostaną (z zapisaną nazwą wizyty).\nJeśli chcesz tylko ukryć zakład, odznacz „Aktywny”.`
+        : "Usunąć tę pozycję? Dotychczasowe wizyty zostaną, ale stracą to powiązanie.\nJeśli chcesz tylko ukryć pozycję, odznacz „Aktywny”.";
+      if (!confirm(msg)) return false;
+      await api.deleteDict(key, x.id);
+      if (key === "ubezp") location.hash = "#/ustawienia/ubezp";
+      toast("Usunięto");
+      await loadDicts();
+      render();
+      return true;
+    },
+  });
+}
+
+// =====================================================================
+//  MODAL
+// =====================================================================
+const modal = $("#modal");
+function openModal({ title, body, submitLabel = "Zapisz", onSubmit, onDelete, onReady }) {
+  const form = $("#modal-form");
+  $("#modal-title").textContent = title;
+  $("#modal-body").innerHTML = body;
+  $("#modal-foot").innerHTML =
+    (onDelete ? `<button type="button" class="btn btn-danger" data-act="delete">Usuń</button><span class="spacer"></span>` : "") +
+    `<button type="button" class="btn" data-act="cancel">Anuluj</button>` +
+    `<button type="submit" class="btn btn-primary" data-act="save">${esc(submitLabel)}</button>`;
+
+  const busy = (on) => $$("#modal-foot button").forEach((b) => (b.disabled = on));
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    if (e.submitter?.value === "cancel") return modal.close();
+    busy(true);
+    try { await onSubmit(new FormData(form)); modal.close(); }
+    catch (err) { if (!(err instanceof SilentError)) { console.error(err); toast(polishError(err)); } }
+    finally { busy(false); }
+  };
+  $('[data-act="cancel"]').onclick = () => modal.close();
+  const del = $('[data-act="delete"]');
+  if (del) del.onclick = async () => {
+    busy(true);
+    try { if (await onDelete()) modal.close(); }
+    catch (err) { toast("Błąd: " + polishError(err)); }
+    finally { busy(false); }
+  };
+  onReady?.($("#modal-body"));
+  modal.showModal();
+  $("#modal-body").scrollTop = 0;
+  if (matchMedia("(min-width: 821px)").matches)
+    setTimeout(() => $("#modal-body input:not([type=hidden]):not([type=radio]), #modal-body select")?.focus({ preventScroll: true }), 50);
+}
+
+const val = (fd, k) => { const v = (fd.get(k) ?? "").toString().trim(); return v === "" ? null : v; };
+const numOrNull = (v) => (v == null || v === "" ? null : +String(v).replace(",", "."));
+
+// Blok „Płatnik” (prywatny / ubezpieczenie + zakład) — wspólny dla pacjenta i wizyty
+function payerFieldsHtml({ prefix = "", platnik = "prywatny", ubezpieczyciel_id = null, nrName, nrLabel, nrValue = "", note = false }) {
+  let list = active("ubezp");
+  if (ubezpieczyciel_id && !list.some((u) => u.id === ubezpieczyciel_id) && byId("ubezp", ubezpieczyciel_id)) list = [...list, byId("ubezp", ubezpieczyciel_id)];
+  const ins = platnik === "ubezpieczenie";
+  return `<div class="field">
+      <span class="field-label">Płatnik${note ? ` <span class="payer-note" data-payer-note="${prefix}" hidden>· ustawiono wg danych pacjenta</span>` : ""}</span>
+      <div class="seg seg-full" role="radiogroup">
+        <label><input type="radio" name="${prefix}platnik" value="prywatny" ${ins ? "" : "checked"}><span>Prywatny</span></label>
+        <label><input type="radio" name="${prefix}platnik" value="ubezpieczenie" ${ins ? "checked" : ""}><span>Ubezpieczenie</span></label>
+      </div>
+    </div>
+    <div class="row" data-ubezp-box="${prefix}" ${ins ? "" : "hidden"}>
+      <label>Zakład ubezpieczeń *${list.length ? "" : ` <a href="#/ustawienia/ubezp" data-close class="hint-link">(dodaj w Ustawieniach)</a>`}
+        <select name="${prefix}ubezpieczyciel_id">
+          <option value="">— wybierz —</option>
+          ${list.map((u) => `<option value="${esc(u.id)}" ${u.id === ubezpieczyciel_id ? "selected" : ""}>${esc(u.nazwa)}</option>`).join("")}
+        </select></label>
+      <label>${esc(nrLabel)}<input name="${prefix}${nrName}" value="${esc(nrValue)}" autocomplete="off"></label>
+    </div>`;
+}
+function bindPayer(b, prefix = "", { required = true, onChange } = {}) {
+  const box = $(`[data-ubezp-box="${prefix}"]`, b);
+  const sel = $(`[name="${prefix}ubezpieczyciel_id"]`, b);
+  const note = $(`[data-payer-note="${prefix}"]`, b);
+  const isIns = () => $(`[name="${prefix}platnik"]:checked`, b)?.value === "ubezpieczenie";
+  const update = () => { box.hidden = !isIns(); if (required) sel.required = isIns(); onChange?.({ ins: isIns(), insurer: isIns() ? sel.value : "" }); };
+  $$(`[name="${prefix}platnik"]`, b).forEach((r) => r.addEventListener("change", () => { update(); if (note) note.hidden = true; }));
+  sel.addEventListener("change", () => { if (note) note.hidden = true; onChange?.({ ins: isIns(), insurer: isIns() ? sel.value : "" }); });
+  update();
+  return {
+    isIns,
+    insurer: () => sel.value,
+    set(platnik, ubezpId, { showNote = false } = {}) {
+      const p = platnik === "ubezpieczenie" ? "ubezpieczenie" : "prywatny";
+      $(`[name="${prefix}platnik"][value="${p}"]`, b).checked = true;
+      if (ubezpId && !$(`option[value="${CSS.escape(ubezpId)}"]`, sel) && byId("ubezp", ubezpId)) {
+        sel.insertAdjacentHTML("beforeend", `<option value="${esc(ubezpId)}">${esc(byId("ubezp", ubezpId).nazwa)}</option>`);
+      }
+      sel.value = p === "ubezpieczenie" ? (ubezpId || "") : "";
+      update();
+      if (note) note.hidden = !showNote;
+    },
+  };
+}
+const patientPayerLabel = (p) => p?.platnik === "ubezpieczenie" ? (byId("ubezp", p.ubezpieczyciel_id)?.nazwa || "Ubezpieczenie") : "Prywatny";
+
+// Komunikat o możliwym duplikacie pacjenta
+function duplicateAlert(dups, { allowForce, selectLabel = "Wybierz" }) {
+  const list = [...dups.byPesel, ...dups.byName];
+  return `<div class="dup-alert" role="alert">
+    <b>${dups.byPesel.length ? "Pacjent z tym numerem PESEL już istnieje w bazie." : "W bazie jest już pacjent o tym imieniu i nazwisku."}</b>
+    <ul>${list.map((p) => `<li><span>${esc(personName(p))}${p.pesel ? " · PESEL " + esc(p.pesel) : ""}${p.telefon ? " · " + esc(p.telefon) : ""}</span>
+      <button type="button" class="btn btn-sm" data-dup-pick="${esc(p.id)}">${esc(selectLabel)}</button></li>`).join("")}</ul>
+    ${allowForce && !dups.byPesel.length ? `<button type="button" class="btn btn-sm btn-ghost" data-dup-force>To inna osoba — dodaj mimo to</button>` : ""}
+  </div>`;
+}
+
+function patientModal(p) {
+  if (!state.dict.ubezp.length) loadDicts().catch(() => {});
+  let force = false;
+  let patientsCache = null;
+  openModal({
+    title: p.id ? "Edycja pacjenta" : "Nowy pacjent",
+    body: `
+      <div id="dup-box"></div>
+      <div class="row">
+        <label>Imię *<input name="imie" required value="${esc(p.imie)}" autocomplete="off"></label>
+        <label>Nazwisko *<input name="nazwisko" required value="${esc(p.nazwisko)}" autocomplete="off"></label>
+      </div>
+      <div class="row">
+        <label>PESEL<input name="pesel" inputmode="numeric" pattern="\\d{11}" maxlength="11" value="${esc(p.pesel)}" title="11 cyfr"></label>
+        <label>Data urodzenia<input name="data_urodzenia" type="date" value="${esc(p.data_urodzenia)}"></label>
+      </div>
+      <div class="row">
+        <label>Telefon<input name="telefon" type="tel" value="${esc(p.telefon)}"></label>
+        <label>E-mail<input name="email" type="email" value="${esc(p.email)}"></label>
+      </div>
+      <label>Adres<input name="adres" value="${esc(p.adres)}"></label>
+      ${payerFieldsHtml({ platnik: p.platnik, ubezpieczyciel_id: p.ubezpieczyciel_id, nrName: "nr_polisy", nrLabel: "Nr polisy / karty", nrValue: p.nr_polisy })}
+      <label>Notatki (rozpoznanie, przeciwwskazania, uwagi)<textarea name="notatki">${esc(p.notatki)}</textarea></label>`,
+    onReady: (b) => {
+      bindPayer(b);
+      $$("[data-close]", b).forEach((a) => a.addEventListener("click", () => modal.close()));
+      $('[name="pesel"]', b).addEventListener("input", (e) => {
+        const d = peselToDate(e.target.value);
+        if (d && !$('[name="data_urodzenia"]', b).value) $('[name="data_urodzenia"]', b).value = d;
+      });
+      ["imie", "nazwisko", "pesel"].forEach((n) => $(`[name="${n}"]`, b).addEventListener("input", () => { force = false; $("#dup-box", b).innerHTML = ""; }));
+    },
+    onSubmit: async (fd) => {
+      const row = {
+        imie: val(fd, "imie"), nazwisko: val(fd, "nazwisko"), pesel: val(fd, "pesel"),
+        data_urodzenia: val(fd, "data_urodzenia"), telefon: val(fd, "telefon"), email: val(fd, "email"),
+        adres: val(fd, "adres"), notatki: val(fd, "notatki"),
+        platnik: val(fd, "platnik") || "prywatny",
+      };
+      row.ubezpieczyciel_id = row.platnik === "ubezpieczenie" ? val(fd, "ubezpieczyciel_id") : null;
+      row.nr_polisy = row.platnik === "ubezpieczenie" ? val(fd, "nr_polisy") : null;
+      if (p.id) row.id = p.id;
+      patientsCache ||= await api.listPatients();
+      const dups = findDuplicates(patientsCache, row, p.id);
+      const blocking = dups.byPesel.length || (!p.id && dups.byName.length && !force);
+      if (blocking) {
+        const box = $("#dup-box");
+        box.innerHTML = duplicateAlert(p.id ? { byPesel: dups.byPesel, byName: [] } : dups, { allowForce: !p.id, selectLabel: "Otwórz kartę" });
+        $$("[data-dup-pick]", box).forEach((btn) => btn.onclick = () => { modal.close(); location.hash = `#/pacjent/${btn.dataset.dupPick}`; });
+        $("[data-dup-force]", box)?.addEventListener("click", () => { force = true; $("#modal-form").requestSubmit($('[data-act="save"]')); });
+        $("#modal-body").scrollTop = 0;
+        throw new SilentError();
+      }
+      const saved = await api.savePatient(row);
+      toast(p.id ? "Zapisano zmiany" : "Dodano pacjenta");
+      if (!p.id) location.hash = `#/pacjent/${saved.id}`; else render();
+    },
+    onDelete: p.id ? async () => {
+      if (!confirm(`Usunąć pacjenta ${p.imie} ${p.nazwisko} wraz z całą historią wizyt? Tej operacji nie można cofnąć.`)) return false;
+      await api.deletePatient(p.id);
+      toast("Usunięto pacjenta");
+      location.hash = "#/pacjenci";
+      return true;
+    } : null,
+  });
+}
+
+// ---------------------------------------------------------------------
+//  Formularz wizyty
+// ---------------------------------------------------------------------
+async function visitModal(v) {
+  await loadDicts();
+  let patients = await api.listPatients();
+  const d = new Date(v.data_wizyty || Date.now());
+  const rodzaje = active("rodzaje");
+  const fizjos = active("fizjo");
+  const ubezp = active("ubezp");
+  // pokazuj także nieaktywne pozycje, jeśli edytowana wizyta ich używa
+  const ensure = (list, key, id) => (id && !list.some((x) => x.id === id) && byId(key, id) ? [...list, byId(key, id)] : list);
+  const fizjoL = ensure(fizjos, "fizjo", v.fizjoterapeuta_id);
+  const ubezpL = ensure(ubezp, "ubezp", v.ubezpieczyciel_id);
+
+  let lastFizjo = ""; try { lastFizjo = localStorage.getItem("rw_ostatni_fizjo") || ""; } catch {}
+  const fizjoSel = v.id ? v.fizjoterapeuta_id : (state.fizjo || (fizjos.some((f) => f.id === lastFizjo) ? lastFizjo : (fizjos.length === 1 ? fizjos[0].id : "")));
+  const platnik = v.platnik || "prywatny";
+  const selectedPatient = v.pacjent_id ? (patients.find((p) => p.id === v.pacjent_id) || v.pacjent) : null;
+  const setupLink = (tab, txt) => `<a href="#/ustawienia/${tab}" data-close class="hint-link">${txt}</a>`;
+
+  openModal({
+    title: v.id ? "Wizyta" : "Nowa wizyta",
+    body: `
+      <div class="field">
+        <span class="field-label">Pacjent *</span>
+        <input type="hidden" name="pacjent_id" value="${esc(v.pacjent_id || "")}">
+        <div class="combo" id="combo">
+          <div class="combo-selected" hidden>
+            <div class="avatar" id="cs-av"></div>
+            <div class="who"><b id="cs-name"></b><span id="cs-sub"></span></div>
+            <button type="button" class="btn btn-sm" id="cs-change">Zmień</button>
+          </div>
+          <div class="combo-search">
+            <div class="combo-row">
+              <input type="search" id="combo-q" placeholder="Imię, nazwisko, PESEL…" autocomplete="off" aria-label="Szukaj pacjenta">
+              <button type="button" class="btn" id="combo-new">+ Nowy pacjent</button>
+            </div>
+            <ul class="combo-list" id="combo-list" role="listbox" hidden></ul>
+          </div>
+          <div class="newpat" id="newpat" hidden>
+            <div class="newpat-head"><b>Nowy pacjent</b><button type="button" class="link" id="np-cancel">Anuluj</button></div>
+            <div id="np-dup"></div>
+            <div class="row">
+              <label>Imię *<input name="np_imie" autocomplete="off"></label>
+              <label>Nazwisko *<input name="np_nazwisko" autocomplete="off"></label>
+            </div>
+            <div class="row">
+              <label>PESEL<input name="np_pesel" inputmode="numeric" maxlength="11" autocomplete="off"></label>
+              <label>Telefon<input name="np_telefon" type="tel" autocomplete="off"></label>
+            </div>
+            ${payerFieldsHtml({ prefix: "np_", nrName: "nr_polisy", nrLabel: "Nr polisy / karty" })}
+            <button type="button" class="btn btn-primary btn-sm" id="np-add">Dodaj pacjenta</button>
+          </div>
+        </div>
+      </div>
+
+      ${payerFieldsHtml({ platnik, ubezpieczyciel_id: v.ubezpieczyciel_id, nrName: "nr_autoryzacji", nrLabel: "Nr skierowania / autoryzacji", nrValue: v.nr_autoryzacji, note: true })}
+
+      <label><span><span id="rodzaj-label">Wizyta</span> <span id="rodzaj-hint"></span></span>
+        <select name="rodzaj_id"></select></label>
+      <div class="row">
+        <label>Data i godzina *<input name="data_wizyty" type="datetime-local" required value="${toLocalInput(d)}"></label>
+        <label>Czas trwania (min)<input name="czas_trwania" type="number" min="5" max="600" step="5" value="${esc(v.czas_trwania ?? 45)}"></label>
+      </div>
+      <label>Fizjoterapeuta${fizjoL.length ? "" : " " + setupLink("fizjo", "(dodaj w Ustawieniach)")}
+        <select name="fizjoterapeuta_id">
+          <option value="">— nie przypisano —</option>
+          ${fizjoL.map((f) => `<option value="${esc(f.id)}" ${f.id === fizjoSel ? "selected" : ""}>${esc(personName(f))}</option>`).join("")}
+        </select></label>
+
+      <div class="row">
+        <label>Status<select name="status">
+          ${Object.entries(STATUSY).map(([k, l]) => `<option value="${k}" ${k === (v.status || "zaplanowana") ? "selected" : ""}>${l}</option>`).join("")}
+        </select></label>
+        <label>Kwota (zł)<input name="kwota" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(v.kwota)}"></label>
+      </div>
+      <label>Dla fizjoterapeuty (zł) <span class="muted" id="pay-hint" style="font-weight:500"></span>
+        <input name="wynagrodzenie" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(v.wynagrodzenie)}"></label>
+      <label class="check"><input name="oplacona" type="checkbox" ${v.oplacona ? "checked" : ""}> Opłacona</label>
+      <label>Opis / przebieg wizyty<textarea name="opis">${esc(v.opis)}</textarea></label>
+      <label>Zalecenia<textarea name="zalecenia">${esc(v.zalecenia)}</textarea></label>
+      ${v.pacjent_id && v.id ? `<a href="#/pacjent/${esc(v.pacjent_id)}" data-close>Przejdź do karty pacjenta ›</a>` : ""}`,
+
+    onReady: (b) => {
+      $$("[data-close]", b).forEach((a) => a.addEventListener("click", () => modal.close()));
+
+      // --- Wizyta z cennika (prywatnego albo wybranego ubezpieczyciela) → czas trwania i cena
+      const rodzajSel = $('[name="rodzaj_id"]', b), czas = $('[name="czas_trwania"]', b), kwota = $('[name="kwota"]', b);
+      let autoPrice = v.id ? null : kwota.value;
+      let keepId = v.rodzaj_id || "";
+      rodzajSel.onchange = () => {
+        const o = rodzajSel.selectedOptions[0];
+        keepId = rodzajSel.value;
+        if (!o || !o.value) return;
+        if (o.dataset.czas) czas.value = o.dataset.czas;
+        if (o.dataset.cena !== "" && (kwota.value === "" || kwota.value === autoPrice)) { kwota.value = o.dataset.cena; autoPrice = kwota.value; }
+      };
+      const rebuildRodzaje = ({ ins, insurer }) => {
+        const label = $("#rodzaj-label", b), hint = $("#rodzaj-hint", b);
+        if (ins && !insurer) {
+          label.textContent = "Wizyta";
+          hint.innerHTML = "";
+          rodzajSel.innerHTML = `<option value="">— najpierw wybierz zakład ubezpieczeń —</option>`;
+          rodzajSel.disabled = true;
+          return;
+        }
+        rodzajSel.disabled = false;
+        const owner = ins ? insurer : null;
+        let list = priceList(owner).filter((r) => r.aktywny !== false || r.id === keepId);
+        const uName = owner ? byId("ubezp", owner)?.nazwa : "";
+        label.textContent = owner ? `Wizyta z cennika ${uName}` : "Wizyta (cennik prywatny)";
+        const legacy = v.rodzaj && !v.rodzaj_id && !keepId ? `<option value="">${esc(v.rodzaj)}</option>` : `<option value="">— wybierz —</option>`;
+        rodzajSel.innerHTML = legacy + list.map((r) =>
+          `<option value="${esc(r.id)}" data-czas="${esc(r.czas_trwania)}" data-cena="${esc(r.cena ?? "")}">${esc(rodzajLabel(r))}${r.kod ? " · " + esc(r.kod) : ""}</option>`).join("");
+        hint.innerHTML = list.length ? "" : `<a href="#/ustawienia/${owner ? "ubezp/" + esc(owner) : "rodzaje"}" class="hint-link" data-close>(brak wizyt w cenniku — dodaj w Ustawieniach)</a>`;
+        $("[data-close]", hint)?.addEventListener("click", () => modal.close());
+        if (list.some((r) => r.id === keepId)) rodzajSel.value = keepId;
+        else {
+          rodzajSel.value = "";
+          if (autoPrice != null && kwota.value === autoPrice) kwota.value = "";
+        }
+        b._syncPay?.();
+      };
+
+      // --- Wynagrodzenie fizjoterapeuty: podpowiadane ze stawki (indywidualnej lub domyślnej)
+      const pay = $('[name="wynagrodzenie"]', b), payHint = $("#pay-hint", b), fizjoS = $('[name="fizjoterapeuta_id"]', b);
+      const r0 = rateFor(v.rodzaj_id, v.fizjoterapeuta_id);
+      let autoPay = !v.id ? "" : (v.wynagrodzenie == null || (r0 != null && +v.wynagrodzenie === r0) ? pay.value : null);
+      const syncPay = () => {
+        const r = rateFor(rodzajSel.value, fizjoS.value);
+        payHint.textContent = r != null ? `· stawka z cennika: ${fmt.money(r)}` : (rodzajSel.value && fizjoS.value ? "· brak stawki w cenniku" : "");
+        if (autoPay != null && pay.value === autoPay) { pay.value = r != null ? String(r) : ""; autoPay = pay.value; }
+      };
+      rodzajSel.addEventListener("change", syncPay);
+      fizjoS.addEventListener("change", syncPay);
+      b._syncPay = syncPay;
+
+      // --- Płatnik wizyty i płatnik nowego pacjenta
+      const visitPayer = bindPayer(b, "", { onChange: rebuildRodzaje });
+      const npPayer = bindPayer(b, "np_", { required: false });
+
+      // --- Wyszukiwarka pacjentów
+      const hidden = $('[name="pacjent_id"]', b);
+      const sel = $(".combo-selected", b), search = $(".combo-search", b), q = $("#combo-q", b), list = $("#combo-list", b);
+      const np = $("#newpat", b);
+      let hi = 0, results = [];
+
+      const pick = (p, applyPayer = true) => {
+        hidden.value = p.id;
+        if (applyPayer) visitPayer.set(p.platnik, p.ubezpieczyciel_id, { showNote: true });
+        $("#cs-av", b).textContent = initials(p);
+        $("#cs-name", b).textContent = fullName(p);
+        $("#cs-sub", b).textContent = [p.pesel ? "PESEL " + p.pesel : "", p.telefon, patientPayerLabel(p)].filter(Boolean).join(" · ");
+        sel.hidden = false; search.hidden = true; np.hidden = true; list.hidden = true;
+      };
+      const unpick = () => {
+        hidden.value = ""; sel.hidden = true; search.hidden = false; np.hidden = true;
+        q.value = ""; list.hidden = true; q.focus();
+      };
+      const draw = () => {
+        const term = q.value.trim();
+        if (!term) { results = []; list.hidden = true; return; }
+        results = matchPatients(patients, term).slice(0, 8);
+        hi = Math.min(hi, Math.max(results.length - 1, 0));
+        list.innerHTML =
+          results.map((p, i) => `<li role="option" class="${i === hi ? "hi" : ""}" data-pid="${esc(p.id)}">
+            <div class="avatar">${esc(initials(p))}</div>
+            <div class="who"><b>${esc(fullName(p))}</b><span>${esc([p.pesel ? "PESEL " + p.pesel : "", p.telefon, patientPayerLabel(p)].filter(Boolean).join(" · "))}</span></div></li>`).join("") +
+          (!results.length ? `<li class="none">Brak pacjenta „${esc(term)}” w bazie</li><li class="add" data-new><span>+</span> Dodaj nowego pacjenta „${esc(term)}”</li>` : "");
+        list.hidden = false;
+        $$("[data-pid]", list).forEach((li) => li.onmousedown = (e) => { e.preventDefault(); pick(patients.find((p) => p.id === li.dataset.pid)); });
+        $("[data-new]", list)?.addEventListener("mousedown", (e) => { e.preventDefault(); openNew(); });
+      };
+      const openNew = () => {
+        const term = q.value.trim();
+        np.hidden = false; list.hidden = true; search.hidden = true;
+        $("#np-dup", b).innerHTML = "";
+        npPayer.set("prywatny", null);
+        // wstępne wypełnienie z wyszukiwanej frazy
+        if (/^\d{11}$/.test(term)) $('[name="np_pesel"]', b).value = term;
+        else if (term) {
+          const parts = term.split(/\s+/);
+          const tc = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+          $('[name="np_imie"]', b).value = parts.length > 1 ? tc(parts[0]) : "";
+          $('[name="np_nazwisko"]', b).value = tc(parts.length > 1 ? parts.slice(1).join(" ") : parts[0]);
+        }
+        setTimeout(() => $(`[name="${$('[name="np_imie"]', b).value ? "np_pesel" : "np_imie"}"]`, b).focus(), 30);
+      };
+      q.oninput = () => { hi = 0; draw(); };
+      q.onfocus = draw;
+      q.onblur = () => setTimeout(() => { list.hidden = true; }, 150);
+      q.onkeydown = (e) => {
+        if (e.key === "ArrowDown") { e.preventDefault(); hi = Math.min(hi + 1, results.length - 1); draw(); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); hi = Math.max(hi - 1, 0); draw(); }
+        else if (e.key === "Enter") { e.preventDefault(); if (results[hi]) pick(results[hi]); else if (q.value.trim()) openNew(); }
+        else if (e.key === "Escape" && !list.hidden) { e.preventDefault(); e.stopPropagation(); list.hidden = true; }
+      };
+      $("#cs-change", b).onclick = unpick;
+      $("#combo-new", b).onclick = openNew;
+      $("#np-cancel", b).onclick = () => { np.hidden = true; search.hidden = false; q.focus(); };
+
+      // dodanie nowego pacjenta z poziomu wizyty
+      let npForce = false;
+      ["np_imie", "np_nazwisko", "np_pesel"].forEach((n) => $(`[name="${n}"]`, b).addEventListener("input", () => { npForce = false; $("#np-dup", b).innerHTML = ""; }));
+      b._addNewPatient = async () => {
+        const row = {
+          imie: $('[name="np_imie"]', b).value.trim(), nazwisko: $('[name="np_nazwisko"]', b).value.trim(),
+          pesel: $('[name="np_pesel"]', b).value.trim() || null, telefon: $('[name="np_telefon"]', b).value.trim() || null,
+          platnik: npPayer.isIns() ? "ubezpieczenie" : "prywatny",
+          ubezpieczyciel_id: npPayer.isIns() ? (npPayer.insurer() || null) : null,
+          nr_polisy: npPayer.isIns() ? ($('[name="np_nr_polisy"]', b).value.trim() || null) : null,
+        };
+        if (row.platnik === "ubezpieczenie" && !row.ubezpieczyciel_id) { toast("Wybierz zakład ubezpieczeń pacjenta"); $('[name="np_ubezpieczyciel_id"]', b).focus(); return null; }
+        if (!row.imie || !row.nazwisko) { toast("Podaj imię i nazwisko pacjenta"); $(`[name="${row.imie ? "np_nazwisko" : "np_imie"}"]`, b).focus(); return null; }
+        if (row.pesel && !/^\d{11}$/.test(row.pesel)) { toast("PESEL musi mieć 11 cyfr"); $('[name="np_pesel"]', b).focus(); return null; }
+        row.data_urodzenia = row.pesel ? peselToDate(row.pesel) : null;
+        patients = await api.listPatients();
+        const dups = findDuplicates(patients, row);
+        if (dups.byPesel.length || (dups.byName.length && !npForce)) {
+          const box = $("#np-dup", b);
+          box.innerHTML = duplicateAlert(dups, { allowForce: true, selectLabel: "Wybierz tego pacjenta" });
+          $$("[data-dup-pick]", box).forEach((btn) => btn.onclick = () => pick(patients.find((p) => p.id === btn.dataset.dupPick)));
+          $("[data-dup-force]", box)?.addEventListener("click", () => { npForce = true; $("#np-add", b).click(); });
+          return null;
+        }
+        const saved = await api.savePatient(row);
+        patients = [...patients, saved];
+        ["np_imie", "np_nazwisko", "np_pesel", "np_telefon", "np_nr_polisy"].forEach((n) => ($(`[name="${n}"]`, b).value = ""));
+        pick(saved);
+        toast("Dodano pacjenta");
+        return saved;
+      };
+      $("#np-add", b).onclick = async (e) => {
+        e.currentTarget.disabled = true;
+        const btn = e.currentTarget;
+        try { await b._addNewPatient(); } catch (err) { toast(polishError(err)); } finally { btn.disabled = false; }
+      };
+      $$("#newpat input", b).forEach((i) => i.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); $("#np-add", b).click(); } }));
+
+      if (selectedPatient) pick(selectedPatient, !v.id);
+    },
+
+    onSubmit: async (fd) => {
+      const b = $("#modal-body");
+      let pacjent_id = val(fd, "pacjent_id");
+      if (!pacjent_id && !$("#newpat", b).hidden) {
+        const saved = await b._addNewPatient();
+        if (!saved) throw new SilentError();
+        pacjent_id = saved.id;
+      }
+      if (!pacjent_id) { toast("Wybierz pacjenta lub dodaj nowego"); $("#combo-q", b)?.focus(); throw new SilentError(); }
+
+      const platnik = val(fd, "platnik") || "prywatny";
+      if (platnik === "ubezpieczenie" && !val(fd, "ubezpieczyciel_id")) { toast("Wybierz zakład ubezpieczeń"); throw new SilentError(); }
+      const rodzaj_id = val(fd, "rodzaj_id");
+      const row = {
+        pacjent_id,
+        data_wizyty: new Date(val(fd, "data_wizyty")).toISOString(),
+        czas_trwania: +(val(fd, "czas_trwania") || 45),
+        rodzaj_id,
+        rodzaj: rodzaj_id ? byId("rodzaje", rodzaj_id)?.nazwa : (v.rodzaj || null),
+        fizjoterapeuta_id: val(fd, "fizjoterapeuta_id"),
+        platnik,
+        ubezpieczyciel_id: platnik === "ubezpieczenie" ? val(fd, "ubezpieczyciel_id") : null,
+        nr_autoryzacji: platnik === "ubezpieczenie" ? val(fd, "nr_autoryzacji") : null,
+        status: val(fd, "status") || "zaplanowana",
+        kwota: numOrNull(val(fd, "kwota")),
+        wynagrodzenie: numOrNull(val(fd, "wynagrodzenie")) ?? rateFor(rodzaj_id, val(fd, "fizjoterapeuta_id")),
+        oplacona: fd.get("oplacona") === "on",
+        opis: val(fd, "opis"),
+        zalecenia: val(fd, "zalecenia"),
+      };
+      if (v.id) row.id = v.id;
+      await api.saveVisit(row);
+      if (row.fizjoterapeuta_id) try { localStorage.setItem("rw_ostatni_fizjo", row.fizjoterapeuta_id); } catch {}
+      toast(v.id ? "Zapisano wizytę" : "Dodano wizytę");
+      if (!v.id && route().name === "wizyty") {
+        state.day = startOfDay(new Date(row.data_wizyty));
+        if (state.mode === "nadchodzace" && new Date(row.data_wizyty) < new Date()) state.mode = "dzien";
+        if (state.fizjo && row.fizjoterapeuta_id !== state.fizjo) state.fizjo = "";
+      }
+      render();
+    },
+    onDelete: v.id ? async () => {
+      if (!confirm("Usunąć tę wizytę?")) return false;
+      await api.deleteVisit(v.id);
+      toast("Usunięto wizytę");
+      render();
+      return true;
+    } : null,
+  });
+}
+
+// =====================================================================
+//  LOGOWANIE
+// =====================================================================
+function showAuth() {
+  $("#app").hidden = true;
+  $("#auth").hidden = false;
+  updateAuthMode();
+}
+
+function updateAuthMode() {
+  $("#auth-submit").textContent = state.signUpMode ? "Załóż konto" : "Zaloguj";
+  $("#auth-toggle").textContent = state.signUpMode ? "Masz konto? Zaloguj się" : "Nie masz konta? Załóż je";
+  $('#auth-form [name="password"]').autocomplete = state.signUpMode ? "new-password" : "current-password";
+  $("#auth-msg").textContent = "";
+}
+
+async function showApp(user) {
+  state.user = user;
+  $("#auth").hidden = true;
+  $("#app").hidden = false;
+  $("#user-email").textContent = user.email || "";
+  $("#demo-banner").hidden = !DEMO;
+  try { await loadDicts(); } catch (err) { console.error(err); }
+  render();
+}
+
+async function logout() {
+  await api.signOut();
+  if (!DEMO) { state.user = null; showAuth(); }
+}
+
+$("#auth-form").onsubmit = async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const email = fd.get("email"), password = fd.get("password");
+  const msg = $("#auth-msg"), btn = $("#auth-submit");
+  msg.className = "msg"; msg.textContent = ""; btn.disabled = true;
+  try {
+    if (state.signUpMode) {
+      const loggedIn = await api.signUp(email, password);
+      if (!loggedIn) { msg.className = "msg ok"; msg.textContent = "Konto utworzone. Potwierdź adres e-mail, klikając link w wiadomości."; }
+    } else {
+      await api.signIn(email, password);
+    }
+    const user = await api.getUser();
+    if (user) showApp(user);
+  } catch (err) {
+    msg.textContent = polishError(err);
+  } finally { btn.disabled = false; }
+};
+$("#auth-toggle").onclick = () => { state.signUpMode = !state.signUpMode; updateAuthMode(); };
+$("#auth-reset").onclick = async () => {
+  const email = $('#auth-form [name="email"]').value;
+  const msg = $("#auth-msg");
+  if (!email) { msg.className = "msg"; msg.textContent = "Wpisz adres e-mail, a potem kliknij ponownie."; return; }
+  try { await api.resetPassword(email); msg.className = "msg ok"; msg.textContent = "Wysłaliśmy link do zmiany hasła."; }
+  catch (err) { msg.className = "msg"; msg.textContent = polishError(err); }
+};
+$("#logout").onclick = logout;
+
+function newPasswordModal() {
+  openModal({
+    title: "Ustaw nowe hasło",
+    body: `<label>Nowe hasło<input name="pw" type="password" minlength="8" required autocomplete="new-password"></label>`,
+    onSubmit: async (fd) => { await api.updatePassword(fd.get("pw")); toast("Hasło zmienione"); },
+  });
+}
+
+// =====================================================================
+//  MOTYW JASNY / CIEMNY
+// =====================================================================
+const THEME_ICONS = `<svg class="moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>` +
+  `<svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`;
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  try { localStorage.setItem("rw_motyw", theme); } catch {}
+  $('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#1d1813" : "#a0714a");
+  $$("[data-theme-toggle]").forEach((b) => {
+    const label = theme === "dark" ? "Włącz jasny motyw" : "Włącz ciemny motyw";
+    b.setAttribute("aria-label", label); b.title = label;
+  });
+}
+function setupThemeButtons(root = document) {
+  $$("[data-theme-toggle]", root).forEach((b) => {
+    if (b.dataset.ready) return;
+    b.dataset.ready = "1";
+    b.innerHTML = THEME_ICONS;
+    b.onclick = () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+  });
+  applyTheme(document.documentElement.dataset.theme || "light");
+}
+function addThemeButton(view) {
+  const actions = $(".page-head .actions", view);
+  if (!actions || $("[data-theme-toggle]", actions)) return;
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "icon-btn theme-toggle"; b.dataset.themeToggle = "";
+  actions.prepend(b);
+  setupThemeButtons(actions);
+}
+
+// =====================================================================
+//  START
+// =====================================================================
+setupThemeButtons();
+$$("[data-nazwa]").forEach((el) => (el.textContent = cfg.NAZWA_GABINETU || "Rejestr wizyt"));
+document.title = cfg.NAZWA_GABINETU || "Rejestr wizyt";
+
+$("#fab").onclick = () => {
+  const { name, id } = route();
+  if (name === "pacjenci") patientModal({});
+  else visitModal({ pacjent_id: name === "pacjent" ? id : null, data_wizyty: defaultVisitDate() });
+};
+window.addEventListener("hashchange", () => { window.scrollTo(0, 0); render(); });
+document.addEventListener("click", (e) => { $$("details.multi[open]").forEach((d) => { if (!d.contains(e.target)) d.open = false; }); });
+
+api.onAuth((event, user) => {
+  if (event === "PASSWORD_RECOVERY") { if (user) showApp(user); newPasswordModal(); return; }
+  if (event === "SIGNED_OUT") { state.user = null; showAuth(); return; }
+  if (event === "SIGNED_IN" && user && !state.user) showApp(user);
+});
+
+const initialUser = await api.getUser();
+if (initialUser) showApp(initialUser); else showAuth();
+
+
+  </script>
+</body>
+</html>
